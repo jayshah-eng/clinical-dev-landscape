@@ -220,6 +220,12 @@
   .dot-respiratory { background: #2A7A4A; }
   .dot-ophtho      { background: #8A5020; }
 
+  /* ── CRITERIA PANELS ROW ── */
+  .criteria-panels-row {
+    display: flex; gap: 12px; margin-bottom: 20px;
+  }
+  .criteria-panels-row .criteria-panel { flex: 1; min-width: 0; margin-bottom: 0; }
+
   /* ── CRITERIA PANEL ── */
   .criteria-panel {
     margin-bottom: 20px;
@@ -574,32 +580,75 @@
       <p>Actionable genomic variants in the HRN cohort for proactive participant recall · Ranked by clinical urgency and trial availability</p>
     </div>
 
-    <!-- CRITERIA PANEL: RECALL -->
-    <details class="criteria-panel">
-      <summary>ⓘ How recall variants are selected <span class="ci-chevron">›</span></summary>
-      <div class="criteria-body">
-        <div class="criteria-col">
-          <h4 class="include">✓ Inclusion Criteria</h4>
-          <ul class="criteria-list">
-            <li><span class="ci-icon ci-check">✓</span> <strong>Germline variant</strong> — identifiable from exome sequencing data at rest in the HRN; not somatic or acquired</li>
-            <li><span class="ci-icon ci-check">✓</span> <strong>Trial eligibility requirement</strong> — genotype is an inclusion criterion or strongly preferred for enrollment in an active Phase 2+ or commercial program</li>
-            <li><span class="ci-icon ci-check">✓</span> <strong>Underdiagnosis gap</strong> — condition has a substantial diagnosed/undiagnosed gap, meaning HRN recall adds value beyond standard clinical referral</li>
-            <li><span class="ci-icon ci-check">✓</span> <strong>Active clinical action</strong> — an approved drug or near-term enrollment window exists; recall translates to a concrete next step for the participant</li>
-            <li><span class="ci-icon ci-check">✓</span> <strong>HRN prevalence threshold</strong> — enough expected carriers in the HRN to justify building a recall protocol (generally ≥10 individuals estimated)</li>
-          </ul>
+    <!-- CRITERIA PANELS: RECALL (side by side) -->
+    <div class="criteria-panels-row">
+
+      <details class="criteria-panel">
+        <summary>ⓘ How recall variants are selected <span class="ci-chevron">›</span></summary>
+        <div class="criteria-body">
+          <div class="criteria-col">
+            <h4 class="include">✓ Inclusion Criteria</h4>
+            <ul class="criteria-list">
+              <li><span class="ci-icon ci-check">✓</span> <strong>Germline variant</strong> — identifiable from exome sequencing data at rest in the HRN; not somatic or acquired</li>
+              <li><span class="ci-icon ci-check">✓</span> <strong>Trial eligibility requirement</strong> — genotype is an inclusion criterion or strongly preferred for enrollment in an active Phase 2+ or commercial program</li>
+              <li><span class="ci-icon ci-check">✓</span> <strong>Underdiagnosis gap</strong> — condition has a substantial diagnosed/undiagnosed gap, meaning HRN recall adds value beyond standard clinical referral</li>
+              <li><span class="ci-icon ci-check">✓</span> <strong>Active clinical action</strong> — an approved drug or near-term enrollment window exists; recall translates to a concrete next step for the participant</li>
+              <li><span class="ci-icon ci-check">✓</span> <strong>HRN prevalence threshold</strong> — enough expected carriers in the HRN to justify building a recall protocol (generally ≥10 individuals estimated)</li>
+            </ul>
+          </div>
+          <div class="criteria-col">
+            <h4 class="exclude">✗ Exclusion Criteria</h4>
+            <ul class="criteria-list">
+              <li><span class="ci-icon ci-cross">✗</span> Somatic, tumor-only, or post-zygotic variants not present in germline sequencing</li>
+              <li><span class="ci-icon ci-cross">✗</span> Variants where clinical management would not change based on genotype alone (no treatment or trial available)</li>
+              <li><span class="ci-icon ci-cross">✗</span> PRS-only enrichment without a high-penetrance variant anchor — those belong in the Clinical Development tab as Prognostic Enrichment</li>
+              <li><span class="ci-icon ci-cross">✗</span> Variants too rare in the HRN to yield a meaningful recall cohort (&lt;10 expected individuals)</li>
+              <li><span class="ci-icon ci-cross">✗</span> Somatic variants not present in germline sequencing data, or variants with no plausible therapeutic or research application</li>
+            </ul>
+          </div>
         </div>
-        <div class="criteria-col">
-          <h4 class="exclude">✗ Exclusion Criteria</h4>
-          <ul class="criteria-list">
-            <li><span class="ci-icon ci-cross">✗</span> Somatic, tumor-only, or post-zygotic variants not present in germline sequencing</li>
-            <li><span class="ci-icon ci-cross">✗</span> Variants where clinical management would not change based on genotype alone (no treatment or trial available)</li>
-            <li><span class="ci-icon ci-cross">✗</span> PRS-only enrichment without a high-penetrance variant anchor — those belong in the Clinical Development tab as Prognostic Enrichment</li>
-            <li><span class="ci-icon ci-cross">✗</span> Variants too rare in the HRN to yield a meaningful recall cohort (&lt;10 expected individuals)</li>
-            <li><span class="ci-icon ci-cross">✗</span> Somatic variants not present in germline sequencing data, or variants with no plausible therapeutic or research application</li>
-          </ul>
+      </details>
+
+      <details class="criteria-panel">
+        <summary>ⓘ Helix Readiness levels explained <span class="ci-chevron">›</span></summary>
+        <div class="criteria-body" style="grid-template-columns: repeat(4,1fr); gap: 16px 24px;">
+          <div class="criteria-col">
+            <h4 style="color:#1A8A56;border-bottom-color:rgba(61,191,132,0.3)">⚡ Engage Now</h4>
+            <ul class="criteria-list">
+              <li><span class="ci-icon ci-check">✓</span> Variant is well-characterized and reliably called from HRN exome data</li>
+              <li><span class="ci-icon ci-check">✓</span> Active Phase 2+ trial or approved drug with a direct enrollment path exists</li>
+              <li><span class="ci-icon ci-check">✓</span> HRN carrier prevalence is sufficient for a meaningful recall cohort</li>
+              <li><span class="ci-icon ci-check">✓</span> Recall protocol is straightforward to scope — sponsor outreach should begin immediately</li>
+            </ul>
+          </div>
+          <div class="criteria-col">
+            <h4 style="color:#2366A8;border-bottom-color:rgba(74,144,217,0.3)">🔬 Develop Protocol</h4>
+            <ul class="criteria-list">
+              <li><span class="ci-icon" style="color:#2366A8">●</span> Variant is identifiable in HRN but a formal recall, consent, and recontact protocol needs to be scoped</li>
+              <li><span class="ci-icon" style="color:#2366A8">●</span> Clinical opportunity is confirmed — the work required is operational, not scientific</li>
+              <li><span class="ci-icon" style="color:#2366A8">●</span> Sponsor relationship or trial alignment may need to be established in parallel</li>
+            </ul>
+          </div>
+          <div class="criteria-col">
+            <h4 style="color:#9A7000;border-bottom-color:rgba(240,180,42,0.3)">📋 Qualify Cohort</h4>
+            <ul class="criteria-list">
+              <li><span class="ci-icon" style="color:#9A7000">●</span> Need to first assess HRN carrier prevalence, ancestry representation, or phenotype depth</li>
+              <li><span class="ci-icon" style="color:#9A7000">●</span> Variant calling pipeline or clinical linkage may need validation before committing to a recall program</li>
+              <li><span class="ci-icon" style="color:#9A7000">●</span> Opportunity is plausible but cohort fit is unconfirmed</li>
+            </ul>
+          </div>
+          <div class="criteria-col">
+            <h4 style="color:#6B7A99;border-bottom-color:rgba(107,122,153,0.2)">⏸ Monitor</h4>
+            <ul class="criteria-list">
+              <li><span class="ci-icon" style="color:#6B7A99">●</span> Program is pre-clinical, Phase 1, or has no active enrollment window</li>
+              <li><span class="ci-icon" style="color:#6B7A99">●</span> No immediate recall action — revisit when a trial opens or drug advances to Phase 2+</li>
+              <li><span class="ci-icon" style="color:#6B7A99">●</span> Useful for target validation, natural history studies, or pipeline awareness</li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </details>
+      </details>
+
+    </div><!-- /criteria-panels-row -->
 
     <!-- RECALL STAT CARDS -->
     <div class="stats" style="grid-template-columns: repeat(6,1fr)">
@@ -670,46 +719,6 @@
         <button class="btn-reset" onclick="resetRecall()">Reset</button>
       </div>
     </div>
-
-    <!-- HELIX READINESS CRITERIA PANEL -->
-    <details class="criteria-panel">
-      <summary>ⓘ Helix Readiness levels explained <span class="ci-chevron">›</span></summary>
-      <div class="criteria-body" style="grid-template-columns: repeat(4,1fr); gap: 16px 24px;">
-        <div class="criteria-col">
-          <h4 style="color:#1A8A56;border-bottom-color:rgba(61,191,132,0.3)">⚡ Engage Now</h4>
-          <ul class="criteria-list">
-            <li><span class="ci-icon ci-check">✓</span> Variant is well-characterized and reliably called from HRN exome data</li>
-            <li><span class="ci-icon ci-check">✓</span> Active Phase 2+ trial or approved drug with a direct enrollment path exists</li>
-            <li><span class="ci-icon ci-check">✓</span> HRN carrier prevalence is sufficient for a meaningful recall cohort</li>
-            <li><span class="ci-icon ci-check">✓</span> Recall protocol is straightforward to scope — sponsor outreach should begin immediately</li>
-          </ul>
-        </div>
-        <div class="criteria-col">
-          <h4 style="color:#2366A8;border-bottom-color:rgba(74,144,217,0.3)">🔬 Develop Protocol</h4>
-          <ul class="criteria-list">
-            <li><span class="ci-icon" style="color:#2366A8">●</span> Variant is identifiable in HRN but a formal recall, consent, and recontact protocol needs to be scoped</li>
-            <li><span class="ci-icon" style="color:#2366A8">●</span> Clinical opportunity is confirmed — the work required is operational, not scientific</li>
-            <li><span class="ci-icon" style="color:#2366A8">●</span> Sponsor relationship or trial alignment may need to be established in parallel</li>
-          </ul>
-        </div>
-        <div class="criteria-col">
-          <h4 style="color:#9A7000;border-bottom-color:rgba(240,180,42,0.3)">📋 Qualify Cohort</h4>
-          <ul class="criteria-list">
-            <li><span class="ci-icon" style="color:#9A7000">●</span> Need to first assess HRN carrier prevalence, ancestry representation, or phenotype depth</li>
-            <li><span class="ci-icon" style="color:#9A7000">●</span> Variant calling pipeline or clinical linkage may need validation before committing to a recall program</li>
-            <li><span class="ci-icon" style="color:#9A7000">●</span> Opportunity is plausible but cohort fit is unconfirmed</li>
-          </ul>
-        </div>
-        <div class="criteria-col">
-          <h4 style="color:#6B7A99;border-bottom-color:rgba(107,122,153,0.2)">⏸ Monitor</h4>
-          <ul class="criteria-list">
-            <li><span class="ci-icon" style="color:#6B7A99">●</span> Program is pre-clinical, Phase 1, or has no active enrollment window</li>
-            <li><span class="ci-icon" style="color:#6B7A99">●</span> No immediate recall action — revisit when a trial opens or drug advances to Phase 2+</li>
-            <li><span class="ci-icon" style="color:#6B7A99">●</span> Useful for target validation, natural history studies, or pipeline awareness</li>
-          </ul>
-        </div>
-      </div>
-    </details>
 
     <!-- RECALL RESULTS BAR -->
     <div class="results-bar">
