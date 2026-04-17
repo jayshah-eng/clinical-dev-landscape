@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clinical Development Landscape | Helix</title>
+<style>
+  :root {
+    --navy:       #1A2B4A;
+    --navy-mid:   #243558;
+    --navy-light: #2D3F6B;
+    --green:      #3DBF84;
+    --green-dark: #2A9E6A;
+    --teal:       #26B8E0;
+    --purple:     #7C5CF5;
+    --pink:       #E85C7A;
+    --blue-acc:   #4A90D9;
+    --gold:       #F0B42A;
+    --bg:         #F0F3F8;
+    --card:       #FFFFFF;
+    --border:     #DDE3EE;
+    --text:       #1E2B3C;
+    --muted:      #6B7A99;
+    --tag-bg:     #EEF2FA;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 13px; }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    padding: 0 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+    border-bottom: 3px solid var(--teal);
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-mark {
+    width: 30px; height: 30px; background: var(--teal);
+    border-radius: 6px; display: flex; align-items: center;
+    justify-content: center; font-weight: 900; color: var(--navy); font-size: 16px;
+  }
+  .logo-text  { color: #fff; font-size: 17px; font-weight: 700; letter-spacing: 0.5px; }
+  .logo-sub   { color: #8AAAD0; font-size: 12px; margin-left: 2px; font-weight: 400; }
+  .header-tag { background: rgba(38,184,224,0.15); color: var(--teal); border: 1px solid rgba(38,184,224,0.35);
+    padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.4px; }
+
+  /* ── PAGE WRAPPER ── */
+  .page { max-width: 1600px; margin: 0 auto; padding: 24px 28px 40px; }
+
+  /* ── PAGE TITLE ── */
+  .page-title { margin-bottom: 20px; }
+  .page-title h1 { font-size: 22px; font-weight: 700; color: var(--navy); }
+  .page-title p  { color: var(--muted); font-size: 13px; margin-top: 3px; }
+
+  /* ── STAT CARDS ── */
+  .stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-bottom: 22px; }
+  .stat-card {
+    background: var(--card); border-radius: 10px; padding: 16px 18px;
+    border: 1px solid var(--border); position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--teal);
+  }
+  .stat-card.purple::before { background: var(--purple); }
+  .stat-card.green::before  { background: var(--green); }
+  .stat-card.pink::before   { background: var(--pink); }
+  .stat-card.blue::before   { background: var(--blue-acc); }
+  .stat-card.navy::before   { background: var(--navy-light); }
+  .stat-card.gold::before   { background: var(--gold); }
+  .stat-card.orange::before { background: #D4641E; }
+  .stat-num   { font-size: 28px; font-weight: 800; color: var(--navy); line-height: 1.1; }
+  .stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── FILTERS ── */
+  .filter-bar {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 18px; margin-bottom: 18px;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr auto; gap: 12px;
+    align-items: end;
+  }
+  .filter-group label { display: block; font-size: 11px; font-weight: 600;
+    color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .filter-group input,
+  .filter-group select {
+    width: 100%; padding: 8px 12px; border: 1.5px solid var(--border);
+    border-radius: 7px; font-size: 13px; color: var(--text);
+    background: #FAFBFD; outline: none; transition: border-color 0.15s; font-family: inherit;
+  }
+  .filter-group input:focus,
+  .filter-group select:focus { border-color: var(--teal); background: #fff; }
+  .filter-group input::placeholder { color: #aab; }
+  .btn-reset {
+    padding: 8px 18px; background: var(--navy); color: #fff; border: none;
+    border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer;
+    transition: background 0.15s; align-self: end; white-space: nowrap;
+  }
+  .btn-reset:hover { background: var(--navy-light); }
+
+  /* ── RESULTS BAR ── */
+  .results-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .results-count { font-size: 13px; color: var(--muted); }
+  .results-count strong { color: var(--navy); }
+  .legend { display: flex; gap: 16px; align-items: center; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
+
+  /* ── TABLE ── */
+  .top-scroll-wrap { overflow-x: auto; margin-bottom: 2px; }
+  .top-scroll-wrap::-webkit-scrollbar { height: 8px; }
+  .top-scroll-wrap::-webkit-scrollbar-track { background: #D0D7E6; border-radius: 3px; }
+  .top-scroll-wrap::-webkit-scrollbar-thumb { background: #7A90B8; border-radius: 3px; }
+  .top-scroll-inner { height: 1px; }
+  .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow-x: auto; }
+  table { width: max-content; min-width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--navy); }
+  thead th {
+    padding: 11px 13px; text-align: left; font-size: 10.5px; font-weight: 700;
+    color: #A8C0E0; text-transform: uppercase; letter-spacing: 0.5px;
+    border-right: 1px solid rgba(255,255,255,0.06); white-space: nowrap;
+    cursor: pointer; user-select: none;
+  }
+  thead th:hover { color: #fff; }
+  thead th .sort-icon { opacity: 0.4; margin-left: 4px; }
+  thead th.sorted .sort-icon { opacity: 1; color: var(--teal); }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:hover { background: #F5F8FF; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td { padding: 10px 13px; vertical-align: top; font-size: 12.5px; line-height: 1.4; }
+
+  /* ── AREA BADGE ── */
+  .area-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px; border-radius: 5px; font-size: 10.5px; font-weight: 700; white-space: nowrap;
+  }
+  .area-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── PHASE BADGE ── */
+  .phase-badge {
+    display: inline-block; padding: 2px 9px; border-radius: 20px;
+    font-size: 10.5px; font-weight: 700; white-space: nowrap;
+  }
+  .phase-commercial { background: rgba(61,191,132,0.15); color: #1E8A56; border: 1px solid rgba(61,191,132,0.3); }
+  .phase-3          { background: rgba(74,144,217,0.12); color: #2366A8; border: 1px solid rgba(74,144,217,0.3); }
+  .phase-2          { background: rgba(240,180,42,0.12); color: #9A7000; border: 1px solid rgba(240,180,42,0.3); }
+  .phase-1          { background: rgba(150,150,170,0.12); color: #555;   border: 1px solid #DDD; }
+
+  /* ── OPPORTUNITY TYPE BADGE ── */
+  .opp-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 20px; font-size: 10.5px; font-weight: 700; white-space: nowrap;
+  }
+  .opp-pe   { background: rgba(124,92,245,0.12); color: #5038C0; border: 1px solid rgba(124,92,245,0.28); }
+  .opp-rec  { background: rgba(38,184,224,0.12); color: #1285A8; border: 1px solid rgba(38,184,224,0.28); }
+  .opp-both { background: rgba(61,191,132,0.12); color: #1A6B40; border: 1px solid rgba(61,191,132,0.28); }
+
+  /* ── PRIORITY BADGE ── */
+  .pri-high   { color: #1E8A56; font-weight: 700; font-size: 11.5px; }
+  .pri-medium { color: #2366A8; font-weight: 600; font-size: 11.5px; }
+  .pri-low    { color: var(--muted); font-size: 11.5px; }
+
+  /* ── COHORT SIZE BADGE ── */
+  .cohort-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 10.5px; font-weight: 700; font-family: 'Courier New', monospace; white-space: nowrap;
+  }
+  .cohort-xl  { background: rgba(61,191,132,0.14); color: #1A6B40; border: 1px solid rgba(61,191,132,0.28); }
+  .cohort-lg  { background: rgba(74,144,217,0.12); color: #1A4A8A; border: 1px solid rgba(74,144,217,0.28); }
+  .cohort-md  { background: rgba(240,180,42,0.12); color: #9A7000; border: 1px solid rgba(240,180,42,0.3); }
+  .cohort-sm  { background: rgba(150,150,165,0.10); color: #666;   border: 1px solid #DDD; }
+
+  /* ── GENE TAG ── */
+  .gene-tag {
+    display: inline-block; background: var(--navy); color: #8AAAD0;
+    padding: 2px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 700;
+    font-family: 'Courier New', monospace; margin: 1px; white-space: nowrap;
+  }
+
+  /* ── STRATEGY BADGE ── */
+  .strat-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 10.5px; font-weight: 700; white-space: nowrap;
+  }
+  .strat-active  { background: rgba(61,191,132,0.14); color: #1A6B40; border: 1px solid rgba(61,191,132,0.28); }
+  .strat-develop { background: rgba(74,144,217,0.12); color: #1A4A8A; border: 1px solid rgba(74,144,217,0.28); }
+  .strat-qualify { background: rgba(240,180,42,0.12); color: #9A7000; border: 1px solid rgba(240,180,42,0.3); }
+  .strat-monitor { background: rgba(150,150,165,0.10); color: #666;   border: 1px solid #DDD; }
+
+  .drug-name    { font-weight: 700; color: var(--navy); }
+  .company-name { color: var(--muted); font-size: 12px; }
+  .bio-type     { color: var(--muted); font-size: 11.5px; font-style: italic; }
+
+  /* ── AREA COLORS ── */
+  .area-cardio    { background: rgba(26,71,138,0.08);  color: #1A478A; }
+  .area-metabolic { background: rgba(30,138,86,0.10);  color: #1E6B40; }
+  .area-neuro     { background: rgba(91,58,142,0.10);  color: #5B3A8E; }
+  .area-ini       { background: rgba(232,92,122,0.10); color: #B83055; }
+  .area-kidney    { background: rgba(0,107,107,0.10);  color: #006B6B; }
+  .area-liver     { background: rgba(139,105,20,0.10); color: #7A5C0A; }
+  .area-glp1      { background: rgba(30,100,180,0.10); color: #1A5AA0; }
+  .area-onco      { background: rgba(180,50,50,0.10);  color: #9A1A1A; }
+
+  .dot-cardio    { background: #1A478A; }
+  .dot-metabolic { background: #2A9E6A; }
+  .dot-neuro     { background: #5B3A8E; }
+  .dot-ini       { background: #E85C7A; }
+  .dot-kidney    { background: #006B6B; }
+  .dot-liver     { background: #F0B42A; }
+  .dot-glp1      { background: #1A7AC8; }
+  .dot-onco      { background: #C03030; }
+
+  .area-neuromusc   { background: rgba(27,107,138,0.10); color: #1B5F8A; }
+  .area-rare        { background: rgba(107,64,128,0.10);  color: #6B4080; }
+  .area-respiratory { background: rgba(42,122,74,0.10);  color: #2A7A4A; }
+  .area-ophtho      { background: rgba(138,80,40,0.10);  color: #8A5020; }
+
+  .dot-neuromusc   { background: #1B5F8A; }
+  .dot-rare        { background: #6B4080; }
+  .dot-respiratory { background: #2A7A4A; }
+  .dot-ophtho      { background: #8A5020; }
+
+  /* ── CRITERIA PANEL ── */
+  .criteria-panel {
+    margin-bottom: 20px;
+  }
+  .criteria-panel summary {
+    display: inline-flex; align-items: center; gap: 7px;
+    cursor: pointer; list-style: none; user-select: none;
+    font-size: 12px; font-weight: 600; color: var(--muted);
+    padding: 6px 12px; border: 1px solid var(--border);
+    border-radius: 20px; background: var(--card);
+    transition: all 0.15s;
+  }
+  .criteria-panel summary::-webkit-details-marker { display: none; }
+  .criteria-panel summary:hover { color: var(--teal); border-color: var(--teal); background: rgba(38,184,224,0.05); }
+  .criteria-panel[open] summary { color: var(--teal); border-color: var(--teal); background: rgba(38,184,224,0.07); }
+  .criteria-panel[open] summary .ci-chevron { transform: rotate(90deg); }
+  .ci-chevron { transition: transform 0.15s; font-style: normal; }
+  .criteria-body {
+    margin-top: 12px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 20px 24px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px 40px;
+  }
+  .criteria-col h4 {
+    font-size: 10.5px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 10px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .criteria-col h4.include { color: #1A6B40; border-bottom-color: rgba(61,191,132,0.3); }
+  .criteria-col h4.exclude { color: #9A3030; border-bottom-color: rgba(220,60,60,0.2); }
+  .criteria-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .criteria-list li {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 12px; color: var(--text); line-height: 1.5;
+  }
+  .criteria-list li .ci-icon { flex-shrink: 0; margin-top: 1px; font-size: 11px; }
+  .ci-check { color: #1A6B40; }
+  .ci-cross  { color: #9A3030; }
+
+  /* ── TABS ── */
+  .tab-nav {
+    display: flex; gap: 0; border-bottom: 2px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .tab-btn {
+    padding: 11px 22px; background: none; border: none;
+    border-bottom: 3px solid transparent; margin-bottom: -2px;
+    font-size: 13px; font-weight: 600; color: var(--muted);
+    cursor: pointer; transition: all 0.15s; font-family: inherit; white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--navy); }
+  .tab-btn.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+  /* ── RECALL TAB ── */
+  .recall-intro { margin-bottom: 20px; }
+  .recall-intro h2 { font-size: 18px; font-weight: 700; color: var(--navy); }
+  .recall-intro p  { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+  .recall-stats { display: grid; grid-template-columns: repeat(5,1fr); gap: 14px; margin-bottom: 22px; }
+
+  .recall-filter-bar {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 18px; margin-bottom: 18px;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 12px; align-items: end;
+  }
+
+  .rtype-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 20px; font-size: 10.5px; font-weight: 700; white-space: nowrap;
+  }
+  .rtype-enroll  { background: rgba(38,184,224,0.12);  color: #1285A8; border: 1px solid rgba(38,184,224,0.28); }
+  .rtype-screen  { background: rgba(61,191,132,0.12);  color: #1A6B40; border: 1px solid rgba(61,191,132,0.28); }
+  .rtype-carrier { background: rgba(240,180,42,0.12);  color: #9A7000; border: 1px solid rgba(240,180,42,0.3); }
+  .rtype-pgx     { background: rgba(124,92,245,0.12);  color: #5038C0; border: 1px solid rgba(124,92,245,0.28); }
+  .rtype-tv      { background: rgba(220,100,30,0.10);  color: #A84A10; border: 1px solid rgba(220,100,30,0.28); }
+
+  .recall-context { font-size: 11.5px; color: var(--muted); line-height: 1.5; max-width: 320px; }
+  .recall-gene    { font-weight: 700; color: var(--navy); font-family: 'Courier New', monospace; }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 32px 0 12px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-divider-left {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-bar {
+    width: 4px; height: 18px; border-radius: 2px; background: var(--teal);
+  }
+  .section-bar.green { background: var(--green); }
+  .section-title {
+    font-size: 14px; font-weight: 700; color: var(--navy);
+  }
+  .section-subtitle {
+    font-size: 11.5px; color: var(--muted); margin-left: 4px;
+  }
+  .section-badge {
+    font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+    background: rgba(61,191,132,0.12); color: #1A6B40;
+    border: 1px solid rgba(61,191,132,0.28);
+  }
+
+  /* ── EMPTY / FOOTER ── */
+  .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .empty .empty-icon { font-size: 36px; margin-bottom: 12px; }
+  .empty h3 { font-size: 16px; color: var(--navy); margin-bottom: 6px; }
+  footer { text-align: center; margin-top: 28px; color: var(--muted); font-size: 11px; }
+
+  /* ── REF LINK ── */
+  .ref-link { color: var(--blue-acc); font-size: 11px; text-decoration: none; white-space: nowrap; }
+  .ref-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">H</div>
+    <span class="logo-text">Helix <span class="logo-sub">GenoSphere™</span></span>
+  </div>
+  <div class="header-tag">Clinical Development Landscape · 2026</div>
+</header>
+
+<div class="page">
+
+  <div class="page-title">
+    <h1>Clinical Development Intelligence</h1>
+    <p>Prognostic enrichment, genetics-first recruitment, and genotype-driven recall opportunities · Prioritized by HRN cohort fit and Helix capability readiness</p>
+  </div>
+
+  <!-- TAB NAV -->
+  <div class="tab-nav">
+    <button class="tab-btn active" id="btn-landscape" onclick="switchTab('landscape')">📊 Clinical Development Opportunities</button>
+    <button class="tab-btn" id="btn-recall" onclick="switchTab('recall')">🧬 Recall by Genotype</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       TAB 1: LANDSCAPE
+  ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-landscape">
+
+  <!-- CRITERIA PANEL: LANDSCAPE -->
+  <details class="criteria-panel">
+    <summary>ⓘ How entries are selected <span class="ci-chevron">›</span></summary>
+    <div class="criteria-body">
+      <div class="criteria-col">
+        <h4 class="include">✓ Inclusion Criteria</h4>
+        <ul class="criteria-list">
+          <li><span class="ci-icon ci-check">✓</span> Active clinical program at Phase 1/2 or later, or commercially approved</li>
+          <li><span class="ci-icon ci-check">✓</span> Has a germline genomic biomarker — causal variant, PRS, or pharmacogenomic marker — that is an enrollment criterion or could enrich the trial population</li>
+          <li><span class="ci-icon ci-check">✓</span> HRN exome + longitudinal EHR can plausibly identify eligible individuals at scale</li>
+          <li><span class="ci-icon ci-check">✓</span> Opportunity type is <strong>Prognostic Enrichment</strong> (PRS stratifies fast progressors to improve trial power), <strong>Genetics-First Recruitment</strong> (genotype is a direct enrollment criterion), or <strong>Both</strong></li>
+          <li><span class="ci-icon ci-check">✓</span> Sponsor has a clear near-term need — active enrollment, upcoming trial design, or label expansion</li>
+        </ul>
+      </div>
+      <div class="criteria-col">
+        <h4 class="exclude">✗ Exclusion Criteria</h4>
+        <ul class="criteria-list">
+          <li><span class="ci-icon ci-cross">✗</span> Somatic or tumor-only biomarkers without a germline component (e.g., acquired EGFR mutations)</li>
+          <li><span class="ci-icon ci-cross">✗</span> Programs where enrichment is purely phenotypic (lab values, imaging) with no genetic basis</li>
+          <li><span class="ci-icon ci-cross">✗</span> Preclinical or discovery-stage programs without a defined enrollment window</li>
+          <li><span class="ci-icon ci-cross">✗</span> Indications where Helix HRN has insufficient ancestry-matched representation for the target variant</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <!-- STAT CARDS -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-total">0</div>
+      <div class="stat-label">Total Opportunities</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="stat-num" id="stat-pe">0</div>
+      <div class="stat-label">Prognostic Enrichment</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-num" id="stat-rec">0</div>
+      <div class="stat-label">Genetics-First Recruitment</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num" id="stat-both">0</div>
+      <div class="stat-label">Dual Opportunity</div>
+    </div>
+    <div class="stat-card navy">
+      <div class="stat-num" id="stat-areas">0</div>
+      <div class="stat-label">Disease Areas</div>
+    </div>
+    <div class="stat-card gold">
+      <div class="stat-num" id="stat-companies">0</div>
+      <div class="stat-label">Companies</div>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label>Search</label>
+      <input type="text" id="f-search" placeholder="Drug, company, gene, indication…">
+    </div>
+    <div class="filter-group">
+      <label>Disease Area</label>
+      <select id="f-area"><option value="">All Areas</option></select>
+    </div>
+    <div class="filter-group">
+      <label>Company</label>
+      <select id="f-company"><option value="">All Companies</option></select>
+    </div>
+    <div class="filter-group">
+      <label>Trial Phase</label>
+      <select id="f-phase">
+        <option value="">All Phases</option>
+        <option>Commercial</option>
+        <option>Phase 3</option>
+        <option>Phase 2/3</option>
+        <option>Phase 2</option>
+        <option>Phase 1/2</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Opportunity Type</label>
+      <select id="f-opp">
+        <option value="">All Types</option>
+        <option value="Prognostic Enrichment">Prognostic Enrichment</option>
+        <option value="Genetics-First Recruitment">Genetics-First Recruitment</option>
+        <option value="Both">Both</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Priority</label>
+      <select id="f-priority">
+        <option value="">All</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Exploratory">Exploratory</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Helix Readiness</label>
+      <select id="f-strategy">
+        <option value="">All</option>
+        <option value="Engage Now">Engage Now</option>
+        <option value="Develop PRS">Develop PRS</option>
+        <option value="Qualify Cohort">Qualify Cohort</option>
+        <option value="Monitor">Monitor</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <button class="btn-reset" onclick="resetFilters()">Reset</button>
+    </div>
+  </div>
+
+  <!-- RESULTS BAR -->
+  <div class="results-bar">
+    <div class="results-count">Showing <strong id="showing-count">0</strong> of <strong id="total-count">0</strong> opportunities</div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#5038C0"></div> Prognostic Enrichment</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1285A8"></div> Genetics-First Recruitment</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1A6B40"></div> Both</div>
+    </div>
+  </div>
+
+  <!-- ACTIVE TRIALS TABLE -->
+  <div class="section-divider" id="active-section">
+    <div class="section-divider-left">
+      <div class="section-bar"></div>
+      <span class="section-title">Active Clinical Trials</span>
+      <span class="section-subtitle">— Phase 1/2 through Phase 3</span>
+    </div>
+    <span id="active-count-badge" class="section-badge">0 opportunities</span>
+  </div>
+  <div class="top-scroll-wrap"><div class="top-scroll-inner"></div></div>
+  <div class="table-wrap">
+    <table id="main-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable(7)"  data-col="7">Opportunity Type <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(0)"  data-col="0">Disease Area <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(1)"  data-col="1">Indication <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(2)"  data-col="2">Company <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(3)"  data-col="3">Drug / Program <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(4)"  data-col="4">Phase <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(5)"  data-col="5">Genomic Biomarker <span class="sort-icon">↕</span></th>
+          <th data-col="6">Biomarker Type</th>
+          <th onclick="sortTable(9)"  data-col="9">HRN Cohort Est. <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(8)"  data-col="8">Priority <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(10)" data-col="10">Helix Readiness <span class="sort-icon">↕</span></th>
+          <th data-col="11">Reference</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+    <div class="empty" id="empty-state" style="display:none">
+      <div class="empty-icon">🧬</div>
+      <h3>No active trial opportunities match your filters</h3>
+      <p>Try adjusting your search or filter criteria</p>
+    </div>
+  </div>
+
+  <!-- COMMERCIAL TABLE -->
+  <div class="section-divider" id="commercial-section">
+    <div class="section-divider-left">
+      <div class="section-bar green"></div>
+      <span class="section-title">Commercial / Approved Programs</span>
+      <span class="section-subtitle">— Approved drugs with active real-world recruitment or label expansion opportunities</span>
+    </div>
+    <span id="commercial-count-badge" class="section-badge">0 opportunities</span>
+  </div>
+  <div class="top-scroll-wrap" id="commercial-top-scroll"><div class="top-scroll-inner" id="commercial-top-inner"></div></div>
+  <div class="table-wrap" id="commercial-table-wrap">
+    <table id="commercial-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable(7)"  data-col="7">Opportunity Type <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(0)"  data-col="0">Disease Area <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(1)"  data-col="1">Indication <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(2)"  data-col="2">Company <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(3)"  data-col="3">Drug / Program <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(5)"  data-col="5">Genomic Biomarker <span class="sort-icon">↕</span></th>
+          <th data-col="6">Biomarker Type</th>
+          <th onclick="sortTable(9)"  data-col="9">HRN Cohort Est. <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(8)"  data-col="8">Priority <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(10)" data-col="10">Helix Readiness <span class="sort-icon">↕</span></th>
+          <th data-col="11">Reference</th>
+        </tr>
+      </thead>
+      <tbody id="commercial-body"></tbody>
+    </table>
+    <div class="empty" id="commercial-empty" style="display:none">
+      <div class="empty-icon">💊</div>
+      <h3>No commercial opportunities match your filters</h3>
+      <p>Try adjusting your search or filter criteria</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>Helix GenoSphere™ · Clinical Development Landscape · 2026 · <em>For internal use only</em></p>
+  </footer>
+  </div><!-- /tab-landscape -->
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       TAB 2: RECALL BY GENOTYPE
+  ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-recall" style="display:none">
+
+    <div class="recall-intro">
+      <h2>Recall by Genotype</h2>
+      <p>Actionable genomic variants in the HRN cohort for proactive participant recall · Ranked by clinical urgency and trial availability</p>
+    </div>
+
+    <!-- CRITERIA PANEL: RECALL -->
+    <details class="criteria-panel">
+      <summary>ⓘ How recall variants are selected <span class="ci-chevron">›</span></summary>
+      <div class="criteria-body">
+        <div class="criteria-col">
+          <h4 class="include">✓ Inclusion Criteria</h4>
+          <ul class="criteria-list">
+            <li><span class="ci-icon ci-check">✓</span> <strong>Germline variant</strong> — identifiable from exome sequencing data at rest in the HRN; not somatic or acquired</li>
+            <li><span class="ci-icon ci-check">✓</span> <strong>Trial eligibility requirement</strong> — genotype is an inclusion criterion or strongly preferred for enrollment in an active Phase 2+ or commercial program</li>
+            <li><span class="ci-icon ci-check">✓</span> <strong>Underdiagnosis gap</strong> — condition has a substantial diagnosed/undiagnosed gap, meaning HRN recall adds value beyond standard clinical referral</li>
+            <li><span class="ci-icon ci-check">✓</span> <strong>Active clinical action</strong> — an approved drug or near-term enrollment window exists; recall translates to a concrete next step for the participant</li>
+            <li><span class="ci-icon ci-check">✓</span> <strong>HRN prevalence threshold</strong> — enough expected carriers in the HRN to justify building a recall protocol (generally ≥10 individuals estimated)</li>
+          </ul>
+        </div>
+        <div class="criteria-col">
+          <h4 class="exclude">✗ Exclusion Criteria</h4>
+          <ul class="criteria-list">
+            <li><span class="ci-icon ci-cross">✗</span> Somatic, tumor-only, or post-zygotic variants not present in germline sequencing</li>
+            <li><span class="ci-icon ci-cross">✗</span> Variants where clinical management would not change based on genotype alone (no treatment or trial available)</li>
+            <li><span class="ci-icon ci-cross">✗</span> PRS-only enrichment without a high-penetrance variant anchor — those belong in the Clinical Development tab as Prognostic Enrichment</li>
+            <li><span class="ci-icon ci-cross">✗</span> Variants too rare in the HRN to yield a meaningful recall cohort (&lt;10 expected individuals)</li>
+            <li><span class="ci-icon ci-cross">✗</span> Somatic variants not present in germline sequencing data, or variants with no plausible therapeutic or research application</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- RECALL STAT CARDS -->
+    <div class="stats" style="grid-template-columns: repeat(6,1fr)">
+      <div class="stat-card">
+        <div class="stat-num" id="rs-total">0</div>
+        <div class="stat-label">Total Variants</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-num" id="rs-enroll">0</div>
+        <div class="stat-label">Genetics-First Enrollment</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-num" id="rs-screen">0</div>
+        <div class="stat-label">High-Risk Screening</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-num" id="rs-carrier">0</div>
+        <div class="stat-label">Carrier Cascade</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-num" id="rs-tv">0</div>
+        <div class="stat-label">Target Validation</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="rs-engage">0</div>
+        <div class="stat-label">Engage Now</div>
+      </div>
+    </div>
+
+    <!-- RECALL FILTERS -->
+    <div class="recall-filter-bar">
+      <div class="filter-group">
+        <label>Search</label>
+        <input type="text" id="rf-search" placeholder="Gene, disease, company…">
+      </div>
+      <div class="filter-group">
+        <label>Recall Type</label>
+        <select id="rf-type">
+          <option value="">All Types</option>
+          <option value="Genetics-First Enrollment">Genetics-First Enrollment</option>
+          <option value="High-Risk Screening">High-Risk Screening</option>
+          <option value="Carrier Cascade">Carrier Cascade</option>
+          <option value="Pharmacogenomic">Pharmacogenomic</option>
+          <option value="Target Validation">Target Validation</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>HRN Prevalence</label>
+        <select id="rf-hrn">
+          <option value="">All Sizes</option>
+          <option value=">50K">&gt;50K</option>
+          <option value="10K–50K">10K–50K</option>
+          <option value="1K–10K">1K–10K</option>
+          <option value="<1K">&lt;1K</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Helix Readiness</label>
+        <select id="rf-ready">
+          <option value="">All</option>
+          <option value="Engage Now">Engage Now</option>
+          <option value="Develop Protocol">Develop Protocol</option>
+          <option value="Qualify Cohort">Qualify Cohort</option>
+          <option value="Monitor">Monitor</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <button class="btn-reset" onclick="resetRecall()">Reset</button>
+      </div>
+    </div>
+
+    <!-- RECALL RESULTS BAR -->
+    <div class="results-bar">
+      <div class="results-count">Showing <strong id="rs-showing">0</strong> of <strong id="rs-total-count">0</strong> variants</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#1285A8"></div> Genetics-First Enrollment</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#1A6B40"></div> High-Risk Screening</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#9A7000"></div> Carrier Cascade</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#D4641E"></div> Target Validation</div>
+      </div>
+    </div>
+
+    <!-- PRE-CLINICAL / DISCOVERY TABLE -->
+    <div class="section-divider">
+      <div class="section-divider-left">
+        <div class="section-bar" style="background:#D4641E"></div>
+        <span class="section-title">Discovery &amp; Pre-clinical Opportunities</span>
+        <span class="section-subtitle">— Target validation, natural history, and biomarker development</span>
+      </div>
+      <span id="preclinical-count-badge" class="section-badge" style="background:rgba(212,100,30,0.10);color:#A84A10;border-color:rgba(212,100,30,0.28)">0 variants</span>
+    </div>
+    <div class="top-scroll-wrap" id="preclinical-top-scroll"><div class="top-scroll-inner" id="preclinical-top-inner"></div></div>
+    <div class="table-wrap" id="preclinical-table-wrap">
+      <table id="preclinical-table">
+        <thead>
+          <tr>
+            <th onclick="sortRecall(0)" data-col="0">Gene / Variant <span class="sort-icon">↕</span></th>
+            <th onclick="sortRecall(2)" data-col="2">Disease / Context <span class="sort-icon">↕</span></th>
+            <th onclick="sortRecall(3)" data-col="3">HRN Prevalence <span class="sort-icon">↕</span></th>
+            <th onclick="sortRecall(4)" data-col="4">Opportunity Type <span class="sort-icon">↕</span></th>
+            <th onclick="sortRecall(5)" data-col="5">Dev. Stage <span class="sort-icon">↕</span></th>
+            <th data-col="6">Programs / Sponsors</th>
+            <th onclick="sortRecall(7)" data-col="7">Helix Readiness <span class="sort-icon">↕</span></th>
+            <th data-col="8">Value Proposition</th>
+          </tr>
+        </thead>
+        <tbody id="preclinical-body"></tbody>
+      </table>
+      <div class="empty" id="preclinical-empty" style="display:none">
+        <div class="empty-icon">🔬</div>
+        <h3>No pre-clinical opportunities match your filters</h3>
+        <p>Try adjusting your search or filter criteria</p>
+      </div>
+    </div>
+
+    <!-- ACTIONABLE RECALL TABLE -->
+    <div class="section-divider" style="margin-top:32px">
+      <div class="section-divider-left">
+        <div class="section-bar"></div>
+        <span class="section-title">Actionable Recall Variants</span>
+        <span class="section-subtitle">— Active Phase 2+ trials or approved programs with direct enrollment path</span>
+      </div>
+      <span id="actionable-count-badge" class="section-badge">0 variants</span>
+    </div>
+    <div class="top-scroll-wrap" id="recall-top-scroll"><div class="top-scroll-inner" id="recall-top-inner"></div></div>
+    <div class="table-wrap" id="recall-table-wrap">
+      <table id="recall-table">
+        <thead>
+          <tr>
+            <th onclick="sortRecall(0)" data-col="0">Gene / Variant <span class="sort-icon">↕</span></th>
+            <th onclick="sortRecall(2)" data-col="2">Disease Association <span class="sort-icon">↕</span></th>
+            <th onclick="sortRecall(3)" data-col="3">HRN Prevalence <span class="sort-icon">↕</span></th>
+            <th onclick="sortRecall(4)" data-col="4">Recall Type <span class="sort-icon">↕</span></th>
+            <th onclick="sortRecall(5)" data-col="5">Active Phase <span class="sort-icon">↕</span></th>
+            <th data-col="6">Lead Companies</th>
+            <th onclick="sortRecall(7)" data-col="7">Helix Readiness <span class="sort-icon">↕</span></th>
+            <th data-col="8">Clinical Context</th>
+          </tr>
+        </thead>
+        <tbody id="recall-body"></tbody>
+      </table>
+      <div class="empty" id="recall-empty" style="display:none">
+        <div class="empty-icon">🧬</div>
+        <h3>No actionable variants match your filters</h3>
+        <p>Try adjusting your search or filter criteria</p>
+      </div>
+    </div>
+
+  </div><!-- /tab-recall -->
+
+  <footer>
+    <p>Helix GenoSphere™ · Clinical Development Intelligence · 2026 · <em>For internal use only</em></p>
+  </footer>
+</div>
+
+<script>
+// DATA: [Area, Indication, Company, Drug, Phase, Biomarker, BiomarkerType, OppType, Priority, HRN_Est, Strategy, Reference]
+// OppType: "Prognostic Enrichment" | "Genetics-First Recruitment" | "Both"
+// Priority: "High" | "Medium" | "Exploratory"
+// Strategy: "Engage Now" | "Develop PRS" | "Qualify Cohort" | "Monitor"
+// HRN_Est: ">50K" | "10K–50K" | "1K–10K" | "<1K"
+const DATA = [
+
+  // ── CARDIOVASCULAR ────────────────────────────────────────────────────────
+  ["Cardiovascular", "Lipoprotein(a) Elevation", "Novartis", "Pelacarsen (TQJ230)", "Phase 3",
+   "LPA / rs10455872", "Causal variant + PRS",
+   "Both", "High", ">50K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=pelacarsen"],
+
+  ["Cardiovascular", "Lipoprotein(a) Elevation", "Amgen", "Olpasiran", "Phase 3",
+   "LPA / rs10455872", "Causal variant + PRS",
+   "Both", "High", ">50K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=olpasiran"],
+
+  ["Cardiovascular", "Lipoprotein(a) Elevation", "Silence Therapeutics", "Zerlasiran (SLN360)", "Phase 2",
+   "LPA", "PRS + causal variant",
+   "Both", "High", ">50K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=zerlasiran+Lp(a)"],
+
+  ["Cardiovascular", "Familial Hypercholesterolemia", "Novartis", "Leqvio (inclisiran)", "Commercial",
+   "PCSK9 / LDLR", "LOF / GOF variant",
+   "Genetics-First Recruitment", "High", "10K–50K",
+   "Engage Now", "https://www.leqvio.com"],
+
+  ["Cardiovascular", "Familial Hypercholesterolemia", "Verve Therapeutics", "VERVE-101 (PCSK9 base editing)", "Phase 1/2",
+   "PCSK9 / LDLR", "LOF/GOF variant + HeFH genetic confirmation",
+   "Genetics-First Recruitment", "High", "10K–50K",
+   "Engage Now", "https://www.vervetx.com/science/programs/"],
+
+  ["Cardiovascular", "ATTR Amyloidosis", "Alnylam", "Amvuttra (vutrisiran)", "Commercial",
+   "TTR", "Pathogenic variant (hATTR)",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://www.amvuttra.com"],
+
+  ["Cardiovascular", "ATTR Amyloidosis", "Ionis / AstraZeneca", "Wainua (eplontersen)", "Commercial",
+   "TTR", "Pathogenic variant (hATTR)",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=eplontersen+TTR"],
+
+  ["Cardiovascular", "Hypertrophic Cardiomyopathy", "Bristol-Myers Squibb", "Camzyos (mavacamten)", "Commercial",
+   "MYH7 / MYBPC3", "Pathogenic variant",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://www.camzyos.com"],
+
+  ["Cardiovascular", "Hypertrophic Cardiomyopathy", "Cytokinetics", "Aficamten", "Phase 3",
+   "MYH7 / MYBPC3", "Pathogenic variant",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=aficamten+HCM"],
+
+  ["Cardiovascular", "Heart Failure with Preserved EF", "Multiple sponsors", "HFpEF trials", "Phase 3",
+   "Polygenic HF PRS", "PRS (fast progressor stratification)",
+   "Prognostic Enrichment", "High", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?condition=HFpEF"],
+
+  ["Cardiovascular", "Atherosclerotic CVD Prevention", "Multiple sponsors", "PCSK9i / statins outcomes", "Phase 3",
+   "Polygenic CAD PRS", "PRS (residual risk enrichment)",
+   "Prognostic Enrichment", "High", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?condition=Atherosclerosis"],
+
+  ["Cardiovascular", "Atrial Fibrillation", "Multiple sponsors", "AF stroke-prevention trials", "Phase 3",
+   "Polygenic AF PRS", "PRS (event rate enrichment)",
+   "Prognostic Enrichment", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?condition=Atrial+Fibrillation"],
+
+  // ── METABOLIC / GLP-1 ─────────────────────────────────────────────────────
+  ["Metabolic / GLP-1", "Obesity — GLP-1 Response", "Novo Nordisk", "Wegovy / Semaglutide outcomes", "Commercial",
+   "Polygenic BMI PRS + MC4R", "PRS + LOF variant",
+   "Prognostic Enrichment", "High", ">50K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=semaglutide+obesity"],
+
+  ["Metabolic / GLP-1", "Obesity — GLP-1 Response", "Eli Lilly", "Zepbound (tirzepatide)", "Commercial",
+   "Polygenic BMI PRS + MC4R", "PRS + LOF variant",
+   "Prognostic Enrichment", "High", ">50K",
+   "Engage Now", "https://www.zepbound.lilly.com"],
+
+  ["Metabolic / GLP-1", "T2D Prevention / Cardiometabolic Risk", "Multiple sponsors", "GLP-1 prevention trials", "Phase 3",
+   "Polygenic T2D PRS", "PRS (fast progressor to T2D)",
+   "Prognostic Enrichment", "High", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=GLP-1+prevention+T2D"],
+
+  ["Metabolic / GLP-1", "Monogenic Obesity", "Rhythm Pharmaceuticals", "Imcivree (setmelanotide)", "Commercial",
+   "MC4R / POMC / PCSK1 / LEPR", "LOF variant (rare, causal)",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://www.imcivree.com"],
+
+  ["Metabolic / GLP-1", "T2D Precision Dosing", "Multiple sponsors", "GLP-1 pharmacogenomics studies", "Phase 2",
+   "GLP1R / TCF7L2 / KCNJ11", "Variant panel (pharmacogenomic)",
+   "Prognostic Enrichment", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=GLP-1+pharmacogenomics"],
+
+  // ── MASH / LIVER ──────────────────────────────────────────────────────────
+  ["MASH / Liver", "MASH (PNPLA3-targeted)", "Ionis", "ION839", "Phase 2",
+   "PNPLA3 I148M", "Allele-specific (I148M homozygous)",
+   "Genetics-First Recruitment", "High", ">50K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=ION839+PNPLA3"],
+
+  ["MASH / Liver", "MASH (PNPLA3-targeted)", "Arrowhead", "ARO-PNPLA3", "Phase 2",
+   "PNPLA3 I148M", "Allele-specific (I148M homozygous)",
+   "Genetics-First Recruitment", "High", ">50K",
+   "Engage Now", "https://www.arrowheadpharma.com/pipeline/aro-pnpla3/"],
+
+  ["MASH / Liver", "MASH — General Risk Stratification", "Madrigal", "Rezdiffra (resmetirom)", "Commercial",
+   "PNPLA3 / TM6SF2 / HSD17B13", "Risk variant panel + PRS",
+   "Both", "High", ">50K",
+   "Engage Now", "https://www.rezdiffra.com"],
+
+  ["MASH / Liver", "MASH — Progression Risk", "Multiple sponsors", "MASH fibrosis progression trials", "Phase 2/3",
+   "PNPLA3 / TM6SF2 / MBOAT7 PRS", "PRS (fast fibrosis progressor)",
+   "Prognostic Enrichment", "High", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?condition=MASH"],
+
+  ["MASH / Liver", "Alpha-1 Antitrypsin Deficiency", "Arrowhead", "Fazirsiran (ARO-AAT)", "Phase 3",
+   "SERPINA1 (Pi*ZZ)", "Biallelic LOF (Pi*ZZ homozygous)",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://www.arrowheadpharma.com/pipeline/aro-aat/"],
+
+  ["MASH / Liver", "Alpha-1 Antitrypsin Deficiency", "Vertex", "VX-634 / correctors", "Phase 2",
+   "SERPINA1 (Pi*ZZ)", "Biallelic LOF (Pi*ZZ homozygous)",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=VX-864+alpha-1"],
+
+  // ── NEURODEGENERATIVE ─────────────────────────────────────────────────────
+  ["Neurodegenerative", "Alzheimer's Disease", "Eisai / Biogen", "Leqembi (lecanemab)", "Commercial",
+   "APOE4 + Polygenic AD PRS", "Risk allele + PRS (fast progressor)",
+   "Both", "High", ">50K",
+   "Engage Now", "https://www.leqembi.com"],
+
+  ["Neurodegenerative", "Alzheimer's Disease", "Eli Lilly", "Kisunla (donanemab)", "Commercial",
+   "APOE4 + Polygenic AD PRS", "Risk allele + PRS",
+   "Both", "High", ">50K",
+   "Engage Now", "https://www.kisunla.com"],
+
+  ["Neurodegenerative", "Alzheimer's Disease Prevention", "Multiple sponsors", "AD prevention trials (AHEAD, DIAN-TU)", "Phase 3",
+   "APOE4 / APP / PSEN1", "Risk allele + causal variant",
+   "Genetics-First Recruitment", "High", ">50K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=APOE4+Alzheimer+prevention"],
+
+  ["Neurodegenerative", "Parkinson's Disease", "Biogen / Denali", "BIIB122 (DNL151)", "Phase 2/3",
+   "LRRK2 G2019S", "Pathogenic variant",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=BIIB122+LRRK2"],
+
+  ["Neurodegenerative", "Parkinson's Disease", "Eli Lilly / Prevail", "PR001 / LY3884963", "Phase 1/2",
+   "GBA1", "LOF pathogenic variant",
+   "Genetics-First Recruitment", "High", "10K–50K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=PR001+GBA1+Parkinson"],
+
+  ["Neurodegenerative", "Parkinson's Disease Progression", "Multiple sponsors", "PD neuroprotection trials", "Phase 2/3",
+   "Polygenic PD PRS + GBA1", "PRS (fast progressor stratification)",
+   "Prognostic Enrichment", "Medium", "10K–50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?condition=Parkinson"],
+
+  ["Neurodegenerative", "ALS", "Biogen", "Qalsody (tofersen)", "Commercial",
+   "SOD1", "Pathogenic variant",
+   "Genetics-First Recruitment", "High", "<1K",
+   "Engage Now", "https://www.qalsody.com"],
+
+  ["Neurodegenerative", "Frontotemporal Dementia", "Multiple sponsors", "FTD GRN / C9orf72 trials", "Phase 2",
+   "GRN / C9orf72", "LOF variant / repeat expansion",
+   "Genetics-First Recruitment", "Medium", "<1K",
+   "Qualify Cohort", "https://clinicaltrials.gov/search?condition=FTD+GRN+C9orf72"],
+
+  // ── KIDNEY ────────────────────────────────────────────────────────────────
+  ["Kidney", "APOL1-mediated Kidney Disease", "Vertex", "Inaxaplin (VX-147)", "Phase 3",
+   "APOL1 G1/G2 high-risk", "Biallelic risk genotype (G1/G1, G1/G2, G2/G2)",
+   "Genetics-First Recruitment", "High", "10K–50K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=inaxaplin+VX-147"],
+
+  ["Kidney", "APOL1-mediated Kidney Disease", "Ionis", "ION532", "Phase 2",
+   "APOL1 G1/G2 high-risk", "Biallelic risk genotype",
+   "Genetics-First Recruitment", "High", "10K–50K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=ION532+APOL1"],
+
+  ["Kidney", "CKD Progression Risk", "Multiple sponsors", "CKD progression / SGLT2i trials", "Phase 3",
+   "APOL1 / Polygenic CKD PRS", "PRS (fast progressor to ESRD)",
+   "Prognostic Enrichment", "High", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?condition=CKD"],
+
+  ["Kidney", "ADPKD", "Otsuka", "Jynarque (tolvaptan)", "Commercial",
+   "PKD1 / PKD2", "Pathogenic variant (autosomal dominant)",
+   "Genetics-First Recruitment", "Medium", "1K–10K",
+   "Engage Now", "https://www.jynarque.com"],
+
+  ["Kidney", "IgA Nephropathy", "Calliditas", "Tarpeyo (budesonide)", "Commercial",
+   "TNFSF13B / Polygenic IgAN PRS", "Risk variant + PRS",
+   "Both", "Medium", "10K–50K",
+   "Develop PRS", "https://www.tarpeyo.com"],
+
+  // ── INI / AUTOIMMUNE ──────────────────────────────────────────────────────
+  ["INI / Autoimmune", "Atopic Dermatitis", "Sanofi / Regeneron", "Dupixent (dupilumab)", "Commercial",
+   "FLG LOF / IL4RA / Polygenic AD PRS", "LOF variant + risk PRS",
+   "Both", "High", ">50K",
+   "Develop PRS", "https://www.dupixent.com"],
+
+  ["INI / Autoimmune", "Rheumatoid Arthritis", "Multiple sponsors", "RA JAK/biologic trials", "Phase 3",
+   "HLA-DRB1 + Polygenic RA PRS", "PRS (fast progressor / erosive disease)",
+   "Prognostic Enrichment", "High", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?condition=Rheumatoid+Arthritis"],
+
+  ["INI / Autoimmune", "Systemic Lupus Erythematosus", "AstraZeneca", "Saphnelo (anifrolumab)", "Commercial",
+   "TREX1 / IFNAR1 / Polygenic SLE PRS", "Risk variant + PRS",
+   "Both", "Medium", "10K–50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=anifrolumab+SLE"],
+
+  ["INI / Autoimmune", "Inflammatory Bowel Disease", "AbbVie", "Skyrizi / Rinvoq IBD trials", "Phase 3",
+   "NOD2 / IL23R / Polygenic IBD PRS", "Risk variant + PRS",
+   "Both", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?condition=IBD+Crohns"],
+
+  ["INI / Autoimmune", "Myasthenia Gravis", "argenx", "Vyvgart Hytrulo (efgartigimod SC)", "Commercial",
+   "FCGRT / MuSK / AChR status", "Pharmacogenomic + biomarker subtype",
+   "Genetics-First Recruitment", "Medium", "1K–10K",
+   "Qualify Cohort", "https://www.vyvgart.com"],
+
+  // ── CARDIOMETABOLIC (CROSS-AREA) ──────────────────────────────────────────
+  ["Cardiometabolic", "Cardiovascular + T2D Risk", "Novo Nordisk", "Cardiovascular outcomes (SELECT trial follow-on)", "Phase 3",
+   "Polygenic Multi-trait PRS (CAD + T2D)", "Multi-trait PRS (fast progressor)",
+   "Prognostic Enrichment", "High", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=SELECT+semaglutide+cardiovascular"],
+
+  ["Cardiometabolic", "Metabolic Syndrome Progression", "Multiple sponsors", "Metabolic syndrome prevention trials", "Phase 2/3",
+   "Polygenic MetS PRS", "PRS (rapid progressors)",
+   "Prognostic Enrichment", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?condition=Metabolic+Syndrome"],
+
+  ["Cardiometabolic", "Heart Failure + T2D", "AstraZeneca", "Farxiga (dapagliflozin) HF+T2D trials", "Phase 3",
+   "Polygenic HF PRS + T2D PRS", "Multi-trait PRS",
+   "Prognostic Enrichment", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=dapagliflozin+heart+failure"],
+
+  // ── ONCOLOGY (HEREDITARY) ─────────────────────────────────────────────────
+  ["Oncology (Hereditary)", "Hereditary Breast / Ovarian Cancer", "AstraZeneca / MSD", "Lynparza / PARP inhibitor trials", "Phase 3",
+   "BRCA1 / BRCA2", "Pathogenic variant (LOF, germline)",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=BRCA+PARP+inhibitor+olaparib"],
+
+  ["Oncology (Hereditary)", "Lynch Syndrome / Hereditary CRC", "Multiple sponsors", "MSI-H / MMR-deficient immunotherapy trials", "Phase 3",
+   "MLH1 / MSH2 / MSH6 / PMS2", "Pathogenic variant (germline MMR)",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=Lynch+Syndrome+immunotherapy"],
+
+  ["Oncology (Hereditary)", "Hereditary CRC Prevention", "Multiple sponsors", "Colorectal cancer prevention (chemoprevention)", "Phase 2/3",
+   "Polygenic CRC PRS + APC / MLH1", "PRS + pathogenic variant",
+   "Both", "Medium", "10K–50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?condition=Colorectal+Cancer+prevention"],
+
+  ["Oncology (Hereditary)", "Prostate Cancer Risk", "Multiple sponsors", "Prostate cancer prevention / early detection trials", "Phase 2/3",
+   "Polygenic PCa PRS + BRCA2", "PRS + pathogenic variant",
+   "Prognostic Enrichment", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?condition=Prostate+Cancer+prevention"],
+
+  // ── SANOFI ────────────────────────────────────────────────────────────────
+  ["INI / Autoimmune", "Severe Asthma (Type 2 eosinophilic)", "Sanofi", "Dupixent (dupilumab) — Asthma", "Commercial",
+   "IL4RA / IL13 + Eosinophil PRS", "Risk variant + PRS",
+   "Both", "High", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=dupilumab+asthma"],
+
+  ["Neuromuscular", "Hemophilia A / B", "Sanofi", "Fitusiran (SAR439774)", "Phase 3",
+   "F8 / F9", "LOF variant (deficiency confirmation)",
+   "Genetics-First Recruitment", "Medium", "<1K",
+   "Qualify Cohort", "https://clinicaltrials.gov/search?term=fitusiran+hemophilia"],
+
+  // ── SAREPTA THERAPEUTICS ──────────────────────────────────────────────────
+  ["Neuromuscular", "Duchenne Muscular Dystrophy (exon 51)", "Sarepta Therapeutics", "Exondys 51 (eteplirsen)", "Commercial",
+   "DMD exon 51 skip-amenable variant", "Specific exon-skip-amenable LOF",
+   "Genetics-First Recruitment", "High", "<1K",
+   "Engage Now", "https://www.exondys51.com"],
+
+  ["Neuromuscular", "Duchenne Muscular Dystrophy (exon 45)", "Sarepta Therapeutics", "Amondys 45 (casimersen)", "Commercial",
+   "DMD exon 45 skip-amenable variant", "Specific exon-skip-amenable LOF",
+   "Genetics-First Recruitment", "High", "<1K",
+   "Engage Now", "https://www.amondys45.com"],
+
+  ["Neuromuscular", "Duchenne Muscular Dystrophy (gene therapy)", "Sarepta Therapeutics", "Elevidys (delandistrogene moxeparvovec)", "Commercial",
+   "DMD pathogenic variant (micro-dystrophin eligible)", "LOF / frameshift / nonsense",
+   "Genetics-First Recruitment", "High", "<1K",
+   "Engage Now", "https://www.elevidys.com"],
+
+  // ── REGENERON ─────────────────────────────────────────────────────────────
+  ["Cardiovascular", "Homozygous Familial Hypercholesterolemia", "Regeneron", "Evkeeza (evinacept)", "Commercial",
+   "LDLR biallelic LOF / APOB / PCSK9 GOF", "Biallelic or compound heterozygous LOF",
+   "Genetics-First Recruitment", "High", "<1K",
+   "Engage Now", "https://www.evkeeza.com"],
+
+  ["Cardiovascular", "Familial Hypercholesterolemia / High CV Risk", "Regeneron", "Praluent (alirocumab)", "Commercial",
+   "PCSK9 / LDLR", "LOF / GOF variant",
+   "Genetics-First Recruitment", "High", "10K–50K",
+   "Engage Now", "https://www.praluent.com"],
+
+  ["Respiratory", "COPD (Type 2 inflammatory)", "Regeneron", "Dupixent (dupilumab) — COPD", "Commercial",
+   "IL4RA / IL13 + Polygenic COPD PRS", "Risk variant + PRS",
+   "Both", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=dupilumab+COPD"],
+
+  // ── MERCK (MSD) ───────────────────────────────────────────────────────────
+  ["Oncology (Hereditary)", "MSI-H / Lynch Syndrome Cancers", "Merck", "Keytruda (pembrolizumab)", "Commercial",
+   "MLH1 / MSH2 / MSH6 / PMS2", "Germline MMR pathogenic variant",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=pembrolizumab+Lynch+MSI"],
+
+  ["Oncology (Hereditary)", "BRCA-mutated Solid Tumors", "Merck", "Keytruda + olaparib combo", "Phase 3",
+   "BRCA1 / BRCA2", "Germline LOF pathogenic variant",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=pembrolizumab+BRCA+olaparib"],
+
+  ["Cardiovascular", "Heart Failure (Reduced EF)", "Merck", "Verquvo (vericiguat)", "Commercial",
+   "Polygenic HF PRS", "PRS (fast progressor enrichment)",
+   "Prognostic Enrichment", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=vericiguat+heart+failure"],
+
+  // ── LARIMAR THERAPEUTICS ──────────────────────────────────────────────────
+  ["Neurodegenerative", "Friedreich Ataxia", "Larimar Therapeutics", "Nomlabofusp (CTI-1601)", "Phase 3",
+   "FXN (GAA trinucleotide repeat expansion)", "Biallelic GAA repeat expansion (≥66 repeats)",
+   "Genetics-First Recruitment", "High", "<1K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=nomlabofusp+Friedreich+ataxia"],
+
+  // ── KARUNA THERAPEUTICS ───────────────────────────────────────────────────
+  ["Neurodegenerative", "Schizophrenia (precision subtyping)", "Karuna Therapeutics", "Cobenfy (xanomeline-trospium)", "Commercial",
+   "Polygenic SCZ PRS + CHRM1 / CHRM4", "PRS (treatment response enrichment)",
+   "Prognostic Enrichment", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=KarXT+Cobenfy+schizophrenia"],
+
+  // ── JOHNSON & JOHNSON ─────────────────────────────────────────────────────
+  ["INI / Autoimmune", "Crohn's Disease (IL-23 pathway)", "Johnson & Johnson", "Tremfya (guselkumab)", "Phase 3",
+   "IL23R / NOD2 + Polygenic IBD PRS", "Risk variant + PRS",
+   "Both", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=guselkumab+Crohns+disease"],
+
+  ["INI / Autoimmune", "Generalized Myasthenia Gravis", "Johnson & Johnson", "Nipocalimab", "Phase 3",
+   "FCGRT / MuSK / AChR subtype", "Pharmacogenomic + biomarker subtype",
+   "Genetics-First Recruitment", "Medium", "1K–10K",
+   "Qualify Cohort", "https://clinicaltrials.gov/search?term=nipocalimab+myasthenia+gravis"],
+
+  ["Oncology (Hereditary)", "HRR-mutated Prostate Cancer", "Johnson & Johnson", "Erleada (apalutamide) + niraparib", "Phase 3",
+   "BRCA2 / ATM / CDK12", "Germline HRR pathogenic variant",
+   "Genetics-First Recruitment", "Medium", "1K–10K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=apalutamide+BRCA+prostate"],
+
+  // ── INCYTE ────────────────────────────────────────────────────────────────
+  ["Oncology (Hereditary)", "MSI-H / Lynch Syndrome Cancers", "Incyte", "Zynyz (retifanlimab)", "Commercial",
+   "MLH1 / MSH2 / MSH6 / PMS2", "Germline MMR pathogenic variant",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=retifanlimab+MSI-H+Lynch"],
+
+  ["Oncology (Hereditary)", "Myeloproliferative Neoplasms", "Incyte", "Jakafi (ruxolitinib)", "Commercial",
+   "JAK2 V617F (somatic) + JAK2 46/1 germline haplotype", "Somatic variant + germline predisposition",
+   "Genetics-First Recruitment", "Medium", "1K–10K",
+   "Monitor", "https://clinicaltrials.gov/search?term=ruxolitinib+myelofibrosis+JAK2"],
+
+  // ── GSK ───────────────────────────────────────────────────────────────────
+  ["INI / Autoimmune", "Severe Eosinophilic Asthma", "GSK", "Depemokimab (IL-5Rα mAb)", "Phase 3",
+   "IL5RA variant + Eosinophil PRS", "Risk variant + PRS",
+   "Both", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=depemokimab+severe+asthma"],
+
+  ["INI / Autoimmune", "Rheumatoid Arthritis (GM-CSF pathway)", "GSK", "Otilimab (GSK3196165)", "Phase 3",
+   "HLA-DRB1 + Polygenic RA PRS", "PRS (erosive disease enrichment)",
+   "Prognostic Enrichment", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=otilimab+rheumatoid+arthritis"],
+
+  ["Kidney", "CKD Anemia (progression risk)", "GSK", "Jesduvroq (daprodustat)", "Commercial",
+   "APOL1 G1/G2 + Polygenic CKD PRS", "Risk genotype + PRS",
+   "Prognostic Enrichment", "Medium", "10K–50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=daprodustat+CKD+anemia"],
+
+  // ── GENENTECH ─────────────────────────────────────────────────────────────
+  ["Neurodegenerative", "Multiple Sclerosis (Primary Progressive)", "Genentech", "Ocrevus (ocrelizumab)", "Commercial",
+   "HLA-DRB1*15:01 + Polygenic MS PRS", "Risk allele + PRS",
+   "Both", "Medium", ">50K",
+   "Develop PRS", "https://www.ocrevus.com"],
+
+  ["Ophthalmology", "Age-Related Macular Degeneration", "Genentech", "Vabysmo (faricimab)", "Commercial",
+   "CFH Y402H / ARMS2 A69S + Polygenic AMD PRS", "Risk variant + PRS",
+   "Both", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=faricimab+AMD+CFH"],
+
+  ["Neuromuscular", "Hemophilia A (prophylaxis)", "Genentech", "Hemlibra (emicizumab)", "Commercial",
+   "F8 LOF pathogenic variant", "Pathogenic LOF (severe hemophilia A)",
+   "Genetics-First Recruitment", "High", "<1K",
+   "Engage Now", "https://www.hemlibra.com"],
+
+  // ── DAIICHI SANKYO ────────────────────────────────────────────────────────
+  ["Oncology (Hereditary)", "BRCA-mutated / HER2-low Breast Cancer", "Daiichi Sankyo", "Enhertu (trastuzumab deruxtecan)", "Phase 3",
+   "BRCA1 / BRCA2 + HER2-low (IHC 1+/2+)", "Germline LOF + tumor biomarker",
+   "Genetics-First Recruitment", "Medium", "1K–10K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=trastuzumab+deruxtecan+BRCA"],
+
+  // ── ELI LILLY (additional) ────────────────────────────────────────────────
+  ["INI / Autoimmune", "Atopic Dermatitis (IL-13 targeted)", "Eli Lilly", "Ebglyss (lebrikizumab)", "Commercial",
+   "IL13 / FLG LOF + Polygenic AD PRS", "Risk variant + PRS",
+   "Both", "High", ">50K",
+   "Develop PRS", "https://www.ebglyss.com"],
+
+  // ── NOVO NORDISK (additional) ─────────────────────────────────────────────
+  ["Metabolic / GLP-1", "Obesity + T2D (combined cardiometabolic)", "Novo Nordisk", "CagriSema (cagrilintide + semaglutide)", "Phase 3",
+   "Polygenic BMI PRS + T2D PRS", "Multi-trait PRS (fast cardiometabolic progressor)",
+   "Prognostic Enrichment", "High", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=cagrisema+obesity+T2D"],
+
+  ["Neurodegenerative", "Parkinson's Disease (GLP-1 neuroprotection)", "Novo Nordisk", "Semaglutide (SPARK trial)", "Phase 2",
+   "Polygenic PD PRS + GBA1", "PRS + risk variant (fast progressor enrichment)",
+   "Prognostic Enrichment", "Medium", "10K–50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=semaglutide+Parkinson+SPARK"],
+
+  // ── NOVARTIS (additional) ─────────────────────────────────────────────────
+  ["Neurodegenerative", "Multiple Sclerosis (B-cell depletion)", "Novartis", "Kesimpta (ofatumumab)", "Commercial",
+   "HLA-DRB1*15:01 + Polygenic MS PRS", "Risk allele + PRS",
+   "Both", "Medium", ">50K",
+   "Develop PRS", "https://www.kesimpta.com"],
+
+  ["Neuromuscular", "Spinal Muscular Atrophy (gene therapy)", "Novartis", "Zolgensma (onasemnogene abeparvovec)", "Commercial",
+   "SMN1 biallelic deletion / pathogenic variant", "Biallelic LOF",
+   "Genetics-First Recruitment", "High", "<1K",
+   "Engage Now", "https://www.zolgensma.com"],
+
+  // ── BIOMARIN ──────────────────────────────────────────────────────────────
+  ["Rare / Genetic", "Achondroplasia", "BioMarin", "Voxzogo (vosoritide)", "Commercial",
+   "FGFR3 G380R (p.Gly380Arg)", "Activating pathogenic variant",
+   "Genetics-First Recruitment", "High", "<1K",
+   "Engage Now", "https://www.voxzogo.com"],
+
+  ["Neuromuscular", "Hemophilia A (gene therapy)", "BioMarin", "Roctavian (valoctocogene roxaparvovec)", "Commercial",
+   "F8 LOF pathogenic variant", "Pathogenic LOF (severe hemophilia A)",
+   "Genetics-First Recruitment", "High", "<1K",
+   "Engage Now", "https://clinicaltrials.gov/search?term=Roctavian+hemophilia+BioMarin"],
+
+  ["Rare / Genetic", "Phenylketonuria (PKU)", "BioMarin", "Palynziq (pegvaliase)", "Commercial",
+   "PAH biallelic LOF", "Biallelic LOF (PAH deficiency)",
+   "Genetics-First Recruitment", "Medium", "<1K",
+   "Qualify Cohort", "https://www.palynziq.com"],
+
+  // ── BRIDGEBIO ─────────────────────────────────────────────────────────────
+  ["Cardiovascular", "ATTR Cardiomyopathy (TTR stabilizer)", "BridgeBio", "Attruby (acoramidis)", "Commercial",
+   "TTR pathogenic variant (Val122Ile, Val30Met, others)", "Pathogenic variant (hATTR cardiac)",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://www.attruby.com"],
+
+  ["Rare / Genetic", "Congenital Adrenal Hyperplasia (CAH)", "BridgeBio", "BBP-631 (CYP21A2 AAV gene therapy)", "Phase 2",
+   "CYP21A2 biallelic LOF", "Biallelic LOF (steroid 21-hydroxylase deficiency)",
+   "Genetics-First Recruitment", "Medium", "<1K",
+   "Qualify Cohort", "https://clinicaltrials.gov/search?term=BBP-631+congenital+adrenal+hyperplasia"],
+
+  // ── BOEHRINGER INGELHEIM ──────────────────────────────────────────────────
+  ["INI / Autoimmune", "Generalized Pustular Psoriasis", "Boehringer Ingelheim", "Spevigo (spesolimab)", "Commercial",
+   "IL36RN (IL36RA) LOF variant", "Pathogenic LOF (IL-36 signaling pathway)",
+   "Genetics-First Recruitment", "High", "<1K",
+   "Engage Now", "https://www.spevigo.com"],
+
+  ["Kidney", "CKD Progression (SGLT2 inhibition)", "Boehringer Ingelheim", "Jardiance (empagliflozin) — CKD", "Commercial",
+   "APOL1 G1/G2 + Polygenic CKD PRS", "Risk genotype + PRS (fast ESRD progressor)",
+   "Prognostic Enrichment", "High", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=empagliflozin+CKD+progression"],
+
+  ["MASH / Liver", "MASH / Obesity (GLP-1 + glucagon)", "Boehringer Ingelheim", "Survodutide (BI 456906)", "Phase 3",
+   "PNPLA3 I148M + Polygenic MASH PRS", "Risk variant + PRS",
+   "Prognostic Enrichment", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=survodutide+MASH+BI456906"],
+
+  ["Respiratory", "Idiopathic Pulmonary Fibrosis (IPF)", "Boehringer Ingelheim", "Nerandomilast (BI 1015550)", "Phase 3",
+   "MUC5B promoter variant + TERT / RTEL1 PRS", "Risk variant + PRS (fast fibrosis progressor)",
+   "Prognostic Enrichment", "Medium", "10K–50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=nerandomilast+IPF+pulmonary+fibrosis"],
+
+  // ── ASTRAZENECA (additional standalone entries) ───────────────────────────
+  ["Respiratory", "Severe Asthma / COPD (TSLP pathway)", "AstraZeneca", "Tezspire (tezepelumab)", "Commercial",
+   "TSLP variant + Polygenic COPD / Asthma PRS", "Risk variant + PRS",
+   "Both", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=tezepelumab+COPD+asthma"],
+
+  ["Oncology (Hereditary)", "BRCA-mutated Ovarian / Breast / Prostate Cancer", "AstraZeneca", "Lynparza (olaparib)", "Commercial",
+   "BRCA1 / BRCA2", "Germline LOF pathogenic variant",
+   "Genetics-First Recruitment", "High", "1K–10K",
+   "Engage Now", "https://www.lynparza.com"],
+
+  // ── ASTELLAS PHARMA ───────────────────────────────────────────────────────
+  ["Oncology (Hereditary)", "HRR-mutated Prostate Cancer (advanced)", "Astellas Pharma", "Xtandi (enzalutamide) + PARP inhibitor", "Phase 3",
+   "BRCA2 / ATM + Polygenic PCa PRS", "Germline HRR variant + PRS",
+   "Both", "Medium", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=enzalutamide+BRCA+prostate+cancer"],
+
+  ["Metabolic / GLP-1", "Menopausal Vasomotor Symptoms", "Astellas Pharma", "Veozah (fezolinetant)", "Commercial",
+   "ESR1 / Polygenic menopause PRS", "PRS (symptom severity enrichment)",
+   "Prognostic Enrichment", "Exploratory", ">50K",
+   "Monitor", "https://www.veozah.com"],
+
+  // ── ABBVIE (additional) ───────────────────────────────────────────────────
+  ["INI / Autoimmune", "Psoriasis / Psoriatic Arthritis (IL-23)", "AbbVie", "Skyrizi (risankizumab)", "Commercial",
+   "IL23R / IL17A + Polygenic Psoriasis PRS", "Risk variant + PRS",
+   "Both", "Medium", ">50K",
+   "Develop PRS", "https://www.skyrizi.com"],
+
+  ["INI / Autoimmune", "Atopic Dermatitis (JAK1 inhibition)", "AbbVie", "Rinvoq (upadacitinib) — AD", "Commercial",
+   "FLG LOF / IL4RA + Polygenic AD PRS", "LOF variant + PRS",
+   "Both", "High", ">50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=upadacitinib+atopic+dermatitis"],
+];
+
+const AREA_CLASS = {
+  "Cardiovascular":          "area-cardio",
+  "Metabolic / GLP-1":       "area-glp1",
+  "MASH / Liver":            "area-liver",
+  "Neurodegenerative":       "area-neuro",
+  "Kidney":                  "area-kidney",
+  "INI / Autoimmune":        "area-ini",
+  "Cardiometabolic":         "area-metabolic",
+  "Oncology (Hereditary)":   "area-onco",
+  "Neuromuscular":           "area-neuromusc",
+  "Rare / Genetic":          "area-rare",
+  "Respiratory":             "area-respiratory",
+  "Ophthalmology":           "area-ophtho",
+};
+const DOT_CLASS = {
+  "Cardiovascular":          "dot-cardio",
+  "Metabolic / GLP-1":       "dot-glp1",
+  "MASH / Liver":            "dot-liver",
+  "Neurodegenerative":       "dot-neuro",
+  "Kidney":                  "dot-kidney",
+  "INI / Autoimmune":        "dot-ini",
+  "Cardiometabolic":         "dot-metabolic",
+  "Oncology (Hereditary)":   "dot-onco",
+  "Neuromuscular":           "dot-neuromusc",
+  "Rare / Genetic":          "dot-rare",
+  "Respiratory":             "dot-respiratory",
+  "Ophthalmology":           "dot-ophtho",
+};
+
+function phaseClass(s) {
+  if (s === "Commercial")         return "phase-commercial";
+  if (s.includes("3") || s.includes("NDA")) return "phase-3";
+  if (s.includes("2"))            return "phase-2";
+  return "phase-1";
+}
+function oppClass(s) {
+  if (s === "Prognostic Enrichment")   return "opp-pe";
+  if (s === "Genetics-First Recruitment") return "opp-rec";
+  return "opp-both";
+}
+function oppLabel(s) {
+  if (s === "Prognostic Enrichment")      return "◈ Prognostic Enrichment";
+  if (s === "Genetics-First Recruitment") return "◉ Genetics-First Recruitment";
+  return "⬡ Both";
+}
+function priClass(s) {
+  if (s === "High")   return "pri-high";
+  if (s === "Medium") return "pri-medium";
+  return "pri-low";
+}
+function priLabel(s) {
+  if (s === "High")        return "▲ High";
+  if (s === "Medium")      return "● Medium";
+  return "○ Exploratory";
+}
+function cohortClass(s) {
+  if (s === ">50K")    return "cohort-xl";
+  if (s === "10K–50K") return "cohort-lg";
+  if (s === "1K–10K")  return "cohort-md";
+  return "cohort-sm";
+}
+function stratClass(s) {
+  if (s === "Engage Now")     return "strat-active";
+  if (s === "Develop PRS")    return "strat-develop";
+  if (s === "Qualify Cohort") return "strat-qualify";
+  return "strat-monitor";
+}
+function stratLabel(s) {
+  if (s === "Engage Now")     return "⚡ Engage Now";
+  if (s === "Develop PRS")    return "🔬 Develop PRS";
+  if (s === "Qualify Cohort") return "📋 Qualify Cohort";
+  return "⏸ Monitor";
+}
+
+function populateFilters() {
+  const areas     = [...new Set(DATA.map(r=>r[0]))].sort();
+  const companies = [...new Set(DATA.map(r=>r[2]))].sort();
+  const areaEl = document.getElementById('f-area');
+  const compEl = document.getElementById('f-company');
+  areas.forEach(a     => { const o=document.createElement('option'); o.value=a; o.text=a; areaEl.add(o); });
+  companies.forEach(c => { const o=document.createElement('option'); o.value=c; o.text=c; compEl.add(o); });
+}
+
+let sortCol = -1, sortAsc = true;
+
+function buildRow(r, includePhaseCol) {
+  const tr = document.createElement('tr');
+  const geneTags = r[5].split(/\s*[\/+]\s*/).map(g =>
+    `<span class="gene-tag">${g.trim()}</span>`).join(' ');
+  const refHtml = r[11]
+    ? `<a href="${r[11]}" target="_blank" rel="noopener" class="ref-link">View ↗</a>`
+    : '—';
+  const phaseCell = includePhaseCol
+    ? `<td><span class="phase-badge ${phaseClass(r[4])}">${r[4]}</span></td>` : '';
+  tr.innerHTML = `
+    <td><span class="opp-badge ${oppClass(r[7])}">${oppLabel(r[7])}</span></td>
+    <td><span class="area-badge ${AREA_CLASS[r[0]]||''}"><span class="area-dot ${DOT_CLASS[r[0]]||''}"></span>${r[0]}</span></td>
+    <td style="max-width:200px">${r[1]}</td>
+    <td><span class="company-name">${r[2]}</span></td>
+    <td><span class="drug-name">${r[3]}</span></td>
+    ${phaseCell}
+    <td>${geneTags}</td>
+    <td><span class="bio-type">${r[6]}</span></td>
+    <td><span class="cohort-badge ${cohortClass(r[9])}">${r[9]}</span></td>
+    <td><span class="${priClass(r[8])}">${priLabel(r[8])}</span></td>
+    <td><span class="strat-badge ${stratClass(r[10])}">${stratLabel(r[10])}</span></td>
+    <td>${refHtml}</td>
+  `;
+  return tr;
+}
+
+function render() {
+  const search   = document.getElementById('f-search').value.toLowerCase();
+  const area     = document.getElementById('f-area').value;
+  const company  = document.getElementById('f-company').value;
+  const phase    = document.getElementById('f-phase').value;
+  const opp      = document.getElementById('f-opp').value;
+  const priority = document.getElementById('f-priority').value;
+  const strategy = document.getElementById('f-strategy').value;
+
+  let filtered = DATA.filter(r => {
+    const hay = r.join(' ').toLowerCase();
+    if (search   && !hay.includes(search))           return false;
+    if (area     && r[0] !== area)                   return false;
+    if (company  && r[2] !== company)                return false;
+    if (phase    && !r[4].includes(phase.split(' ')[0])) return false;
+    if (opp      && r[7] !== opp)                    return false;
+    if (priority && r[8] !== priority)               return false;
+    if (strategy && r[10] !== strategy)              return false;
+    return true;
+  });
+
+  if (sortCol >= 0) {
+    filtered.sort((a,b) => {
+      const av = a[sortCol]||'', bv = b[sortCol]||'';
+      return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+    });
+  }
+
+  // Split into active trials vs commercial
+  const activeRows     = filtered.filter(r => r[4] !== 'Commercial');
+  const commercialRows = filtered.filter(r => r[4] === 'Commercial');
+
+  // ── Active trials table ──
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = '';
+  if (activeRows.length === 0) {
+    document.getElementById('empty-state').style.display = 'block';
+    document.getElementById('main-table').style.display = 'none';
+  } else {
+    document.getElementById('empty-state').style.display = 'none';
+    document.getElementById('main-table').style.display = 'table';
+    activeRows.forEach(r => tbody.appendChild(buildRow(r, true)));
+  }
+  document.getElementById('active-count-badge').textContent =
+    activeRows.length + ' opportunit' + (activeRows.length === 1 ? 'y' : 'ies');
+
+  // ── Commercial table ──
+  const cbody = document.getElementById('commercial-body');
+  cbody.innerHTML = '';
+  const commercialSection = document.getElementById('commercial-section');
+  const commercialWrap    = document.getElementById('commercial-table-wrap');
+  const commercialTopScroll = document.getElementById('commercial-top-scroll');
+  if (commercialRows.length === 0) {
+    document.getElementById('commercial-empty').style.display = 'block';
+    document.getElementById('commercial-table').style.display = 'none';
+  } else {
+    document.getElementById('commercial-empty').style.display = 'none';
+    document.getElementById('commercial-table').style.display = 'table';
+    commercialRows.forEach(r => cbody.appendChild(buildRow(r, false)));
+  }
+  document.getElementById('commercial-count-badge').textContent =
+    commercialRows.length + ' opportunit' + (commercialRows.length === 1 ? 'y' : 'ies');
+
+  // Sync commercial scroll bar
+  const cInner = document.getElementById('commercial-top-inner');
+  if (cInner) cInner.style.width = commercialWrap.scrollWidth + 'px';
+
+  // Update stat cards (combined totals)
+  document.getElementById('showing-count').textContent   = filtered.length;
+  document.getElementById('total-count').textContent     = DATA.length;
+  document.getElementById('stat-total').textContent      = filtered.length;
+  document.getElementById('stat-pe').textContent         = filtered.filter(r=>r[7]==='Prognostic Enrichment').length;
+  document.getElementById('stat-rec').textContent        = filtered.filter(r=>r[7]==='Genetics-First Recruitment').length;
+  document.getElementById('stat-both').textContent       = filtered.filter(r=>r[7]==='Both').length;
+  document.getElementById('stat-areas').textContent      = new Set(filtered.map(r=>r[0])).size;
+  document.getElementById('stat-companies').textContent  = new Set(filtered.map(r=>r[2])).size;
+}
+
+function sortTable(col) {
+  if (sortCol === col) sortAsc = !sortAsc;
+  else { sortCol = col; sortAsc = true; }
+  document.querySelectorAll('#tab-landscape thead th').forEach(th => {
+    const matched = parseInt(th.dataset.col) === col;
+    th.classList.toggle('sorted', matched);
+    const icon = th.querySelector('.sort-icon');
+    if (icon) icon.textContent = matched ? (sortAsc?'↑':'↓') : '↕';
+  });
+  render();
+}
+
+function resetFilters() {
+  ['f-search','f-area','f-company','f-phase','f-opp','f-priority','f-strategy']
+    .forEach(id => { const el = document.getElementById(id); el.tagName==='INPUT' ? el.value='' : el.value=''; });
+  sortCol = -1; sortAsc = true;
+  document.querySelectorAll('thead th').forEach(th => {
+    th.classList.remove('sorted');
+    const icon = th.querySelector('.sort-icon');
+    if (icon) icon.textContent = '↕';
+  });
+  render();
+}
+
+['f-search','f-area','f-company','f-phase','f-opp','f-priority','f-strategy'].forEach(id => {
+  document.getElementById(id).addEventListener('input', render);
+  document.getElementById(id).addEventListener('change', render);
+});
+
+populateFilters();
+render();
+
+// Sync top scrollbar — active trials table
+const tableWrap = document.querySelector('#main-table').closest('.table-wrap');
+const topWrap   = tableWrap.previousElementSibling;
+const topInner  = topWrap.querySelector('.top-scroll-inner');
+function syncTopScrollWidth() { topInner.style.width = tableWrap.scrollWidth + 'px'; }
+syncTopScrollWidth();
+new ResizeObserver(syncTopScrollWidth).observe(tableWrap);
+topWrap.addEventListener('scroll', () => { tableWrap.scrollLeft = topWrap.scrollLeft; });
+tableWrap.addEventListener('scroll', () => { topWrap.scrollLeft = tableWrap.scrollLeft; });
+
+// Sync top scrollbar — commercial table
+const commWrap  = document.getElementById('commercial-table-wrap');
+const commTop   = document.getElementById('commercial-top-scroll');
+const commInner = document.getElementById('commercial-top-inner');
+function syncCommScrollWidth() { commInner.style.width = commWrap.scrollWidth + 'px'; }
+syncCommScrollWidth();
+new ResizeObserver(syncCommScrollWidth).observe(commWrap);
+commTop.addEventListener('scroll',  () => { commWrap.scrollLeft = commTop.scrollLeft; });
+commWrap.addEventListener('scroll', () => { commTop.scrollLeft = commWrap.scrollLeft; });
+
+// ═══════════════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════════════
+function switchTab(tab) {
+  document.getElementById('tab-landscape').style.display = tab === 'landscape' ? 'block' : 'none';
+  document.getElementById('tab-recall').style.display    = tab === 'recall'    ? 'block' : 'none';
+  document.getElementById('btn-landscape').classList.toggle('active', tab === 'landscape');
+  document.getElementById('btn-recall').classList.toggle('active', tab === 'recall');
+  if (tab === 'recall') renderRecall();
+}
+
+// ═══════════════════════════════════════════════════════
+// RECALL PRE-CLINICAL DATA
+// Format: same as RECALL_DATA; RecallType = "Target Validation" | "Natural History" etc.
+// ═══════════════════════════════════════════════════════
+const RECALL_PRECLINICAL_DATA = [
+  // ── CARDIOVASCULAR / METABOLIC ────────────────────────────────────────────
+  ["ANGPTL4 LOF", "Rare LOF variants — lower TG and CVD risk", "Hypertriglyceridemia / Atherosclerosis Prevention",
+   "1K–10K", "Target Validation", "Pre-clinical",
+   "Multiple sponsors (next-gen ANGPTL4 inhibitors); Regeneron, Ionis",
+   "Qualify Cohort",
+   "Natural history of ANGPTL4 LOF carriers in HRN validates target; longitudinal EHR confirms CV event reduction and identifies adverse metabolic effects for risk/benefit modeling"],
+
+  ["ASGR1 LOF", "Rare LOF variants associated with lower LDL and CAD risk", "Cardiovascular Disease Prevention (hepatic LDL clearance)",
+   "1K–10K", "Target Validation", "Pre-clinical",
+   "Multiple sponsors exploring ASGR1 inhibition; Amgen, Novartis early programs",
+   "Qualify Cohort",
+   "ASGR1 LOF reduces ASCVD risk via hepatic LDL uptake mechanism; HRN data validates phenotypic concordance and characterizes long-term safety profile for emerging hepatic targets"],
+
+  ["SLC30A8 LOF", "Rare LOF (p.Arg138*) — protects against T2D", "Type 2 Diabetes Prevention (zinc transporter target)",
+   "1K–10K", "Target Validation", "Pre-clinical",
+   "Multiple pharma sponsors; Novo Nordisk, Pfizer early-stage programs",
+   "Qualify Cohort",
+   "SLC30A8 LOF carriers have 65% lower T2D risk; HRN longitudinal metabolic data (glucose, HbA1c, BMI) validates pancreatic beta-cell protection mechanism for drug target selection"],
+
+  ["GPR75 LOF", "Ultra-rare LOF variants — ~12 lb lower BMI vs. non-carriers", "Monogenic Obesity (GPR75 target validation)",
+   "<1K", "Target Validation", "Pre-clinical",
+   "Regeneron (GWAS discovery); multiple early-stage programs",
+   "Qualify Cohort",
+   "GPR75 LOF identified via large-scale exome sequencing (Regeneron); HRN multi-ancestry cohort can validate and characterize phenotypic breadth including metabolic comorbidities for IND-enabling studies"],
+
+  ["INHBE LOF", "Rare LOF variants — lower visceral fat, favorable metabolic profile", "Visceral Obesity / Metabolic Syndrome (target validation)",
+   "<1K", "Target Validation", "Pre-clinical",
+   "AstraZeneca (GWAS/discovery); early-stage programs",
+   "Qualify Cohort",
+   "INHBE LOF associated with 3–5× lower abdominal obesity risk; AZ published human genetics evidence (Nature 2021); HRN confirms metabolic phenotype and longitudinal NAFLD/T2D outcomes"],
+
+  ["GIPR LOF / GOF", "LOF (lower BMI, enhanced GLP-1 response) or GOF variants", "Obesity / GLP-1+GIP Combination Therapy Optimization",
+   "10K–50K", "Target Validation", "Pre-clinical",
+   "Eli Lilly (tirzepatide mechanism validation); Novo Nordisk (cagrisema)",
+   "Develop Protocol",
+   "GIPR variants modulate differential response to GIP agonism in GLP-1/GIP combination drugs; HRN natural history supports pharmacogenomics sub-studies and next-gen GIP-targeted program design"],
+
+  // ── NEURODEGENERATIVE ─────────────────────────────────────────────────────
+  ["TREM2 R47H / TREM2 LOF", "p.Arg47His risk variant or rare LOF variants", "Late-Onset Alzheimer's / Neuroinflammation",
+   "1K–10K", "Target Validation", "Phase 1",
+   "Alector (AL002), AbbVie, Multiple sponsors exploring TREM2 agonism",
+   "Qualify Cohort",
+   "TREM2 R47H triples AD risk via impaired microglial phagocytosis; TREM2 agonist programs entering Phase 1/2; HRN can characterize natural history and validate microglial activation biomarkers pre-IND"],
+
+  ["SORL1 rare variants", "Rare likely-pathogenic missense and LOF variants", "Late-Onset Alzheimer's Disease (endosomal sorting target)",
+   "1K–10K", "Target Validation", "Pre-clinical",
+   "Multiple early-stage programs; Neurimmune, academic consortia",
+   "Qualify Cohort",
+   "SORL1 variants impair retromer-mediated APP trafficking and Aβ clearance; natural history of SORL1 carriers in HRN validates endosomal sorting as a druggable target distinct from amyloid pathway"],
+
+  ["PINK1 / PARKIN (PRKN)", "Biallelic LOF (early-onset PD) or heterozygous carriers (risk)", "Parkinson's Disease — Mitophagy Target Validation",
+   "1K–10K", "Target Validation", "Pre-clinical",
+   "Mitokinin, AbbVie (mitophagy program), Aligning Science Across Parkinson's (ASAP)",
+   "Qualify Cohort",
+   "PINK1/PARKIN pathway is a genetically validated mitophagy target; heterozygous carriers may have subclinical mitochondrial dysfunction; HRN longitudinal data enables natural history characterization for IND-enabling work"],
+
+  ["MAPT H1 haplotype / MAPT rare variants", "H1/H1 homozygosity or rare pathogenic MAPT variants (P301L, R406W)", "Tauopathies — PSP, CBD, AD (tau-targeting programs)",
+   ">50K", "Target Validation", "Pre-clinical",
+   "Biogen (BIIB080 tau ASO), AbbVie, Roche, Multiple tau-targeting programs",
+   "Develop Protocol",
+   "MAPT H1/H1 homozygosity increases PSP and CBD risk ~2–4×; natural history of H1/H1 carriers in HRN validates tau-targeting approach and provides stratification tool for upcoming anti-tau trial design"],
+
+  ["SNCA multiplication / pathogenic variants", "SNCA triplication/duplication or A53T, A30P, E46K pathogenic variants", "Parkinson's Disease — Alpha-synuclein Target Validation",
+   "<1K", "Target Validation", "Pre-clinical",
+   "Roche/Prothena (prasinezumab), Neuropore, AbbVie (ABBV-0805)",
+   "Qualify Cohort",
+   "SNCA multiplication causes rare but genetically pure PD via alpha-synuclein overexpression; strongest human validation for anti-synuclein immunotherapy; HRN identifies undiagnosed cases for natural history studies"],
+
+  // ── RARE / GENETIC ────────────────────────────────────────────────────────
+  ["KCNK3 LOF", "Rare pathogenic LOF variants (p.G203D, p.A208P, others)", "Pulmonary Arterial Hypertension (KCNK3 potassium channel)",
+   "<1K", "Target Validation", "Pre-clinical",
+   "Multiple early-stage programs; Arena Pharmaceuticals, academic consortia",
+   "Qualify Cohort",
+   "KCNK3 LOF causes heritable PAH via loss of potassium channel-mediated vasodilation; rare but genetically homogeneous subgroup ideal for proof-of-concept precision trials; HRN identifies undiagnosed carriers"],
+
+  ["NOTCH3 CADASIL variants", "Pathogenic cysteine-altering variants in EGF-like repeat domain", "CADASIL — Cerebral Small Vessel Disease",
+   "<1K", "Target Validation", "Pre-clinical",
+   "Multiple early-stage gene therapy programs; academic consortia (Notch3 ASO)",
+   "Qualify Cohort",
+   "CADASIL severely underdiagnosed; NOTCH3 cysteine variants cause progressive stroke and dementia from 40s onward; HRN + longitudinal EHR enables natural history characterization for gene therapy IND-enabling studies"],
+
+  ["PALB2 / CHEK2 / ATM", "Pathogenic variants in moderate-penetrance cancer predisposition genes", "Hereditary Breast / Pancreatic Cancer (moderate-risk loci)",
+   "10K–50K", "Target Validation", "Pre-clinical",
+   "AstraZeneca, Merck (PARP inhibitor label expansion); Multiple prevention trial sponsors",
+   "Develop Protocol",
+   "PALB2/CHEK2/ATM confer 2–5× cancer risk but are underrepresented in current trial eligibility vs. BRCA; HRN natural history data supports PARP inhibitor label expansion and cancer prevention trial design"],
+
+  // ── KIDNEY / METABOLIC ────────────────────────────────────────────────────
+  ["UMOD variants", "Risk variants in uromodulin promoter / coding region", "CKD / Hypertension (uromodulin pathway target)",
+   ">50K", "Target Validation", "Pre-clinical",
+   "Multiple sponsors exploring uromodulin pathway; Bayer, Roche early programs",
+   "Develop Protocol",
+   "UMOD variants are among the most replicated CKD GWAS hits; HRN longitudinal eGFR trajectories and BP data validates uromodulin as a causal mediator for tubulo-interstitial CKD drug programs"],
+
+  ["SLC2A9 / ABCG2 LOF", "SLC2A9 LOF (lower urate) or ABCG2 LOF (higher urate, gout risk)", "Gout / Hyperuricemia (urate transporter target validation)",
+   ">50K", "Target Validation", "Pre-clinical",
+   "Multiple sponsors (next-gen uricosuric programs); Selecta Biosciences",
+   "Develop Protocol",
+   "SLC2A9 and ABCG2 are the top urate GWAS loci; HRN carriers with longitudinal uric acid labs validate transporter function and gout episode risk, providing human genetics rationale for new urate-lowering drug programs"],
+
+  ["MUTYH biallelic LOF", "Biallelic pathogenic variants (MUTYH-associated polyposis — MAP)", "Hereditary Colorectal Polyposis / CRC Prevention",
+   "<1K", "Target Validation", "Pre-clinical",
+   "Multiple sponsors (base excision repair pathway); immunotherapy prevention programs",
+   "Qualify Cohort",
+   "MAP is underdiagnosed relative to other hereditary CRC syndromes; biallelic MUTYH carriers have high CRC and polyposis risk; HRN identifies undiagnosed adults for colonoscopy cascade and emerging chemoprevention trials"],
+];
+
+// ═══════════════════════════════════════════════════════
+// RECALL DATA
+// Format: [Gene, Variant, Disease, HRN_Est, RecallType, ActivePhase, LeadCompanies, Readiness, Context]
+// RecallType: "Genetics-First Enrollment" | "High-Risk Screening" | "Carrier Cascade" | "Pharmacogenomic"
+// Readiness:  "Engage Now" | "Develop Protocol" | "Qualify Cohort" | "Monitor"
+// ═══════════════════════════════════════════════════════
+const RECALL_DATA = [
+  // ── HIGH PRIORITY: Engage Now ─────────────────────────────────────────────
+  ["LPA / rs10455872", "High Lp(a) genotype (causal variant + elevated PRS)", "Cardiovascular Disease — Lp(a)-mediated ASCVD",
+   ">50K", "Genetics-First Enrollment", "Phase 3",
+   "Novartis (Pelacarsen), Amgen (Olpasiran), Silence Therapeutics (Zerlasiran)",
+   "Engage Now",
+   "~20% of HRN expected to carry genetically elevated Lp(a); largest genetically-addressable CVD opportunity in the cohort"],
+
+  ["PCSK9 / LDLR", "LOF (PCSK9) / LOF or GOF (LDLR) — FH-causing", "Familial Hypercholesterolemia",
+   "10K–50K", "Genetics-First Enrollment", "Commercial / Phase 3",
+   "Regeneron (Praluent), Novartis (Leqvio), Verve (VERVE-101), Regeneron (Evkeeza)",
+   "Engage Now",
+   "FH severely underdiagnosed (~90%); germline sequencing enables definitive dx and immediate drug eligibility"],
+
+  ["APOE ε4 (APOE4)", "ε4 homozygous (highest risk) or ε4/ε3 heterozygous", "Alzheimer's Disease Prevention / Treatment",
+   ">50K", "High-Risk Screening", "Commercial / Phase 3",
+   "Eisai/Biogen (Leqembi), Eli Lilly (Kisunla), Multiple AD prevention trials",
+   "Engage Now",
+   "APOE4 is the strongest known genetic risk factor for late-onset AD; carriers are actively sought for anti-amyloid trials"],
+
+  ["BRCA1 / BRCA2", "Pathogenic germline LOF variant", "Hereditary Breast / Ovarian / Pancreatic / Prostate Cancer",
+   "1K–10K", "Genetics-First Enrollment", "Commercial / Phase 3",
+   "AstraZeneca (Lynparza), Merck (Keytruda), Daiichi Sankyo (Enhertu), J&J (Erleada+niraparib)",
+   "Engage Now",
+   "Germline BRCA enables PARP inhibitor + immunotherapy eligibility across multiple tumor types; direct trial recruitment path"],
+
+  ["APOL1", "G1/G2 biallelic high-risk genotype (G1/G1, G1/G2, G2/G2)", "APOL1-mediated Kidney Disease (AMKD)",
+   "10K–50K", "Genetics-First Enrollment", "Phase 3",
+   "Vertex (Inaxaplin), Ionis (ION532), Boehringer Ingelheim (Jardiance CKD)",
+   "Engage Now",
+   "~13% of African-ancestry HRN members expected to carry high-risk biallelic genotype; severely underdiagnosed before ESRD"],
+
+  ["PNPLA3 I148M", "rs738409 G/G homozygous (I148M homozygous)", "MASH / Liver Fibrosis Progression",
+   ">50K", "Genetics-First Enrollment", "Phase 2/3",
+   "Ionis (ION839), Arrowhead (ARO-PNPLA3), Boehringer Ingelheim (Survodutide)",
+   "Engage Now",
+   "PNPLA3 I148M homozygotes have 2–4× higher MASH progression risk; genotype required for allele-specific trials"],
+
+  ["TTR", "Pathogenic variant (Val122Ile, Val30Met, Thr60Ala, others)", "hATTR Amyloidosis (Cardiac + Polyneuropathy)",
+   "1K–10K", "Genetics-First Enrollment", "Commercial",
+   "Alnylam (Amvuttra), Ionis/AZ (Wainua), BridgeBio (Attruby)",
+   "Engage Now",
+   "TTR Val122Ile prevalent in ~3–4% of African-ancestry individuals; avg 2.5 year dx delay; HRN enables pre-symptomatic identification"],
+
+  ["MLH1 / MSH2 / MSH6 / PMS2", "Pathogenic germline LOF (MMR deficiency)", "Lynch Syndrome / Hereditary CRC & Endometrial Cancer",
+   "1K–10K", "Genetics-First Enrollment", "Commercial / Phase 3",
+   "Merck (Keytruda), Incyte (Zynyz), J&J (Tremfya for IBD subset)",
+   "Engage Now",
+   "Lynch is the most common hereditary cancer syndrome; ~50% lifetime cancer risk; genomic recall enables immunotherapy eligibility + lifelong surveillance"],
+
+  ["MYH7 / MYBPC3", "Pathogenic sarcomere gene variant", "Hypertrophic Cardiomyopathy (HCM)",
+   "1K–10K", "Genetics-First Enrollment", "Commercial / Phase 3",
+   "BMS (Camzyos), Cytokinetics (Aficamten)",
+   "Engage Now",
+   "HCM pathogenic carriers may be presymptomatic; recall enables cascade family screening and early myosin inhibitor eligibility"],
+
+  ["LRRK2 G2019S", "p.Gly2019Ser pathogenic variant", "Parkinson's Disease (LRRK2-PD)",
+   "1K–10K", "Genetics-First Enrollment", "Phase 2/3",
+   "Biogen/Denali (BIIB122)",
+   "Engage Now",
+   "Most common known genetic cause of PD (~1–2% of all PD); LRRK2 kinase inhibitor trials specifically require this genotype"],
+
+  ["GBA1", "Pathogenic LOF variant (heterozygous = PD risk; biallelic = Gaucher)", "Parkinson's Disease Risk / Gaucher Disease",
+   "10K–50K", "Genetics-First Enrollment", "Phase 1/2",
+   "Eli Lilly/Prevail (PR001), Novo Nordisk (SPARK semaglutide), Sanofi (venglustat)",
+   "Engage Now",
+   "GBA1 heterozygotes have 5–10× PD risk; direct path to GBA1-targeted neuroprotection trials; HRN multi-ancestry advantage"],
+
+  ["DMD", "Pathogenic frameshift / exon-skip-amenable variant", "Duchenne Muscular Dystrophy",
+   "<1K", "Genetics-First Enrollment", "Commercial",
+   "Sarepta (Elevidys, Exondys 51, Amondys 45)",
+   "Engage Now",
+   "Exon skip amenability determines specific drug eligibility; exon 51/45/53 skippable mutations have distinct approved therapies"],
+
+  ["SERPINA1 Pi*ZZ", "Biallelic LOF — E342K homozygous (Pi*Z)", "Alpha-1 Antitrypsin Deficiency (AATD)",
+   "1K–10K", "Genetics-First Enrollment", "Phase 3",
+   "Arrowhead (Fazirsiran), Vertex (VX-634)",
+   "Engage Now",
+   "Pi*ZZ causes severe lung + liver disease; avg 8-year dx delay; HRN recall enables early RNA-targeting therapy enrollment"],
+
+  ["FXN (GAA repeat)", "Biallelic GAA trinucleotide repeat expansion (≥66 repeats)", "Friedreich Ataxia",
+   "<1K", "Genetics-First Enrollment", "Phase 3",
+   "Larimar Therapeutics (Nomlabofusp), PTC Therapeutics (Skyclarys)",
+   "Engage Now",
+   "Frataxin repeat expansion causes the most common inherited ataxia; molecular dx enables neuroprotection trial enrollment"],
+
+  ["F8 / F9", "Pathogenic LOF variant (hemophilia A / hemophilia B)", "Hemophilia A / B",
+   "<1K", "Carrier Cascade", "Commercial",
+   "Genentech (Hemlibra), BioMarin (Roctavian), Sanofi (Fitusiran)",
+   "Engage Now",
+   "Female carriers often have sub-normal factor levels; recall enables treatment access + informed reproductive counseling for families"],
+
+  ["MC4R / POMC / PCSK1", "Pathogenic LOF variant (monogenic obesity)", "Monogenic Obesity",
+   "1K–10K", "Genetics-First Enrollment", "Commercial",
+   "Rhythm Pharmaceuticals (Imcivree)",
+   "Engage Now",
+   "MC4R is the most common monogenic cause of obesity; Imcivree FDA-approved specifically for this genotype; HRN recall enables treatment access"],
+
+  ["FGFR3 G380R", "p.Gly380Arg activating variant", "Achondroplasia",
+   "<1K", "Genetics-First Enrollment", "Commercial",
+   "BioMarin (Voxzogo), Ascendis (TransCon CNP)",
+   "Engage Now",
+   "FGFR3 G380R accounts for ~97% of achondroplasia; Voxzogo approved for pediatric and adolescent growth; early diagnosis critical"],
+
+  ["IL36RN (IL36RA)", "Pathogenic LOF (Leu27Pro, Thr123Met, others)", "Generalized Pustular Psoriasis (GPP)",
+   "<1K", "Genetics-First Enrollment", "Commercial",
+   "Boehringer Ingelheim (Spevigo/Spesolimab)",
+   "Engage Now",
+   "IL36RN LOF found in 10–19% of GPP patients; often undiagnosed or misdiagnosed; Spevigo approved specifically for flare prevention"],
+
+  ["SMN1", "Biallelic deletion or pathogenic variant", "Spinal Muscular Atrophy (SMA)",
+   "<1K", "Carrier Cascade", "Commercial",
+   "Novartis (Zolgensma), Roche/Genentech (Evrysdi), Biogen (Spinraza)",
+   "Engage Now",
+   "SMN1 carrier frequency ~1 in 40; adult SMA2/3 patients may be undertreated; carrier recall enables family planning + newborn intervention"],
+
+  // ── MEDIUM PRIORITY: Develop Protocol ────────────────────────────────────
+  ["Polygenic CAD / LDL PRS", "Top decile polygenic score for LDL or coronary artery disease", "Atherosclerotic CVD Prevention",
+   ">50K", "High-Risk Screening", "Phase 3",
+   "Multiple sponsors (PCSK9i, statins, inclisiran outcomes trials)",
+   "Develop Protocol",
+   "PRS outperforms traditional risk calculators for identifying individuals at highest preventable CVD risk before first event"],
+
+  ["APOE4 / Polygenic AD PRS", "Elevated polygenic AD score (non-APOE4 pathway)", "Alzheimer's Disease Prevention",
+   ">50K", "High-Risk Screening", "Phase 3",
+   "Multiple AD prevention trials (AHEAD 3-45, DIAN-TU, A4 follow-on)",
+   "Develop Protocol",
+   "Polygenic AD PRS beyond APOE4 captures an additional 20–30% of population-level AD risk; key for non-APOE4 trial enrichment"],
+
+  ["FLG LOF", "Pathogenic LOF variant (skin barrier dysfunction)", "Atopic Dermatitis (moderate-severe)",
+   ">50K", "Genetics-First Enrollment", "Commercial / Phase 3",
+   "Sanofi/Regeneron (Dupixent), AbbVie (Rinvoq), Eli Lilly (Ebglyss)",
+   "Develop Protocol",
+   "FLG LOF is the strongest single genetic risk factor for AD; combined with high polygenic PRS enables precision biologic trial recruitment"],
+
+  ["HLA-DRB1*15:01", "Risk allele for MS susceptibility", "Multiple Sclerosis",
+   ">50K", "High-Risk Screening", "Commercial / Phase 3",
+   "Genentech (Ocrevus), Novartis (Kesimpta), Multiple sponsors",
+   "Develop Protocol",
+   "HLA-DRB1*15:01 combined with polygenic MS PRS identifies highest-risk individuals; emerging early-intervention trial landscape"],
+
+  ["CFH Y402H / ARMS2 A69S", "High-risk haplotype (biallelic CFH + ARMS2 risk alleles)", "Age-Related Macular Degeneration (AMD)",
+   ">50K", "High-Risk Screening", "Commercial / Phase 3",
+   "Genentech (Vabysmo), Apellis (Syfovre), Regeneron (Eylea HD)",
+   "Develop Protocol",
+   "AMD risk variants identify >50% of individuals with high genetic risk before vision loss; enables early anti-VEGF / complement inhibitor eligibility"],
+
+  ["PKD1 / PKD2", "Pathogenic truncating variant (autosomal dominant)", "Autosomal Dominant PKD (ADPKD)",
+   "1K–10K", "Genetics-First Enrollment", "Commercial",
+   "Otsuka (Jynarque/Tolvaptan)",
+   "Develop Protocol",
+   "ADPKD is highly prevalent (~1 in 400); genetic dx enables early tolvaptan initiation; HRN cascade screening can identify affected families"],
+
+  ["IL23R / NOD2", "Risk variants for IBD susceptibility (IBD PRS)", "Inflammatory Bowel Disease (Crohn's / UC)",
+   ">50K", "High-Risk Screening", "Phase 3",
+   "AbbVie (Skyrizi, Rinvoq), J&J (Tremfya), Multiple sponsors",
+   "Develop Protocol",
+   "IBD PRS + pathway variants stratify patients by likely biologic response pathway; enables IL-23 vs JAK vs TNF treatment selection"],
+
+  ["Polygenic T2D PRS", "High polygenic T2D score (top decile)", "T2D Prevention / GLP-1 Response Prediction",
+   ">50K", "High-Risk Screening", "Commercial / Phase 3",
+   "Novo Nordisk (Wegovy, CagriSema), Eli Lilly (Zepbound), Multiple sponsors",
+   "Develop Protocol",
+   "T2D PRS identifies highest-risk individuals for diabetes prevention and GLP-1 pharmacogenomics trials; cardiometabolic intersection"],
+
+  // ── LOWER PRIORITY: Qualify Cohort / Monitor ──────────────────────────────
+  ["PAH", "Biallelic pathogenic variants (PKU-causing)", "Phenylketonuria (PKU)",
+   "<1K", "Genetics-First Enrollment", "Commercial / Phase 2",
+   "BioMarin (Palynziq, BMN 307)",
+   "Qualify Cohort",
+   "PKU adults not captured via newborn screen may be undiagnosed; HRN sequencing enables incidental dx and treatment access"],
+
+  ["CYP21A2", "Biallelic pathogenic variants (classic or non-classic CAH)", "Congenital Adrenal Hyperplasia (CAH)",
+   "<1K", "Genetics-First Enrollment", "Phase 2",
+   "BridgeBio (BBP-631), Neurocrine (Corcept)",
+   "Qualify Cohort",
+   "Classic and non-classic CAH are likely underdiagnosed in adults; gene therapy trials require biallelic genotype confirmation"],
+
+  ["GRN / C9orf72", "Pathogenic LOF (GRN) / hexanucleotide repeat expansion (C9orf72)", "Frontotemporal Dementia / ALS-FTD",
+   "<1K", "Genetics-First Enrollment", "Phase 2",
+   "Multiple sponsors (progranulin augmentation, C9orf72 ASO trials)",
+   "Qualify Cohort",
+   "Rare but severe; active gene-targeted trials in early stages; presymptomatic carriers may be identifiable via HRN"],
+
+  ["JAK2 V617F / JAK2 46/1 haplotype", "Germline 46/1 predisposition + somatic V617F acquisition", "Myeloproliferative Neoplasms (MPN)",
+   "1K–10K", "Genetics-First Enrollment", "Commercial",
+   "Incyte (Jakafi), Multiple sponsors",
+   "Monitor",
+   "Germline JAK2 haplotype increases somatic mutation acquisition risk; MPN patients may benefit from targeted recall for clinical trials"],
+];
+
+// ═══════════════════════════════════════════════════════
+// RECALL RENDERING
+// ═══════════════════════════════════════════════════════
+function rtypeClass(s) {
+  if (s === "Genetics-First Enrollment") return "rtype-enroll";
+  if (s === "High-Risk Screening")       return "rtype-screen";
+  if (s === "Carrier Cascade")           return "rtype-carrier";
+  if (s === "Target Validation")         return "rtype-tv";
+  return "rtype-pgx";
+}
+function rtypeIcon(s) {
+  if (s === "Genetics-First Enrollment") return "◉ Genetics-First Enrollment";
+  if (s === "High-Risk Screening")       return "▲ High-Risk Screening";
+  if (s === "Carrier Cascade")           return "⬡ Carrier Cascade";
+  if (s === "Target Validation")         return "◆ Target Validation";
+  return "⬢ Pharmacogenomic";
+}
+function recallStratLabel(s) {
+  if (s === "Engage Now")       return "⚡ Engage Now";
+  if (s === "Develop Protocol") return "🔬 Develop Protocol";
+  if (s === "Qualify Cohort")   return "📋 Qualify Cohort";
+  return "⏸ Monitor";
+}
+
+let recallSortCol = -1, recallSortAsc = true;
+
+function buildRecallRow(r) {
+  const tr = document.createElement('tr');
+  const geneHtml = r[0].split(/\s*\/\s*/).map(g =>
+    `<span class="gene-tag">${g.trim()}</span>`).join(' ');
+  tr.innerHTML = `
+    <td><span class="recall-gene">${geneHtml}</span><div style="font-size:10.5px;color:var(--muted);margin-top:3px">${r[1]}</div></td>
+    <td style="max-width:200px">${r[2]}</td>
+    <td><span class="cohort-badge ${cohortClass(r[3])}">${r[3]}</span></td>
+    <td><span class="rtype-badge ${rtypeClass(r[4])}">${rtypeIcon(r[4])}</span></td>
+    <td><span class="phase-badge ${phaseClass(r[5])}">${r[5]}</span></td>
+    <td style="font-size:11.5px;color:var(--muted);max-width:220px;line-height:1.4">${r[6]}</td>
+    <td><span class="strat-badge ${stratClass(r[7])}">${recallStratLabel(r[7])}</span></td>
+    <td><span class="recall-context">${r[8]}</span></td>
+  `;
+  return tr;
+}
+
+function applyRecallFilters(dataset) {
+  const search = document.getElementById('rf-search').value.toLowerCase();
+  const rtype  = document.getElementById('rf-type').value;
+  const hrn    = document.getElementById('rf-hrn').value;
+  const ready  = document.getElementById('rf-ready').value;
+  let out = dataset.filter(r => {
+    const hay = r.join(' ').toLowerCase();
+    if (search && !hay.includes(search)) return false;
+    if (rtype  && r[4] !== rtype)        return false;
+    if (hrn    && r[3] !== hrn)          return false;
+    if (ready  && r[7] !== ready)        return false;
+    return true;
+  });
+  if (recallSortCol >= 0) {
+    out.sort((a, b) => {
+      const av = a[recallSortCol] || '', bv = b[recallSortCol] || '';
+      return recallSortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+    });
+  }
+  return out;
+}
+
+function renderRecall() {
+  // ── Pre-clinical table ──
+  const pcFiltered = applyRecallFilters(RECALL_PRECLINICAL_DATA);
+  const pcBody = document.getElementById('preclinical-body');
+  pcBody.innerHTML = '';
+  if (pcFiltered.length === 0) {
+    document.getElementById('preclinical-empty').style.display = 'block';
+    document.getElementById('preclinical-table').style.display = 'none';
+  } else {
+    document.getElementById('preclinical-empty').style.display = 'none';
+    document.getElementById('preclinical-table').style.display = 'table';
+    pcFiltered.forEach(r => pcBody.appendChild(buildRecallRow(r)));
+  }
+  document.getElementById('preclinical-count-badge').textContent =
+    pcFiltered.length + ' variant' + (pcFiltered.length === 1 ? '' : 's');
+
+  // Sync preclinical scroll bar
+  const pcWrap  = document.getElementById('preclinical-table-wrap');
+  const pcInner = document.getElementById('preclinical-top-inner');
+  if (pcInner) pcInner.style.width = pcWrap.scrollWidth + 'px';
+
+  // ── Actionable recall table ──
+  const filtered = applyRecallFilters(RECALL_DATA);
+  const tbody = document.getElementById('recall-body');
+  tbody.innerHTML = '';
+  if (filtered.length === 0) {
+    document.getElementById('recall-empty').style.display = 'block';
+    document.getElementById('recall-table').style.display = 'none';
+  } else {
+    document.getElementById('recall-empty').style.display = 'none';
+    document.getElementById('recall-table').style.display = 'table';
+    filtered.forEach(r => tbody.appendChild(buildRecallRow(r)));
+  }
+  document.getElementById('actionable-count-badge').textContent =
+    filtered.length + ' variant' + (filtered.length === 1 ? '' : 's');
+
+  // Sync actionable recall scroll bar
+  const rWrap  = document.getElementById('recall-table-wrap');
+  const rInner = document.getElementById('recall-top-inner');
+  if (rInner) rInner.style.width = rWrap.scrollWidth + 'px';
+
+  // ── Combined stats (both tables) ──
+  const all = [...pcFiltered, ...filtered];
+  const totalAll = RECALL_DATA.length + RECALL_PRECLINICAL_DATA.length;
+  document.getElementById('rs-total').textContent       = totalAll;
+  document.getElementById('rs-showing').textContent     = all.length;
+  document.getElementById('rs-total-count').textContent = totalAll;
+  document.getElementById('rs-enroll').textContent      = all.filter(r=>r[4]==='Genetics-First Enrollment').length;
+  document.getElementById('rs-screen').textContent      = all.filter(r=>r[4]==='High-Risk Screening').length;
+  document.getElementById('rs-carrier').textContent     = all.filter(r=>r[4]==='Carrier Cascade').length;
+  document.getElementById('rs-tv').textContent          = all.filter(r=>r[4]==='Target Validation').length;
+  document.getElementById('rs-engage').textContent      = all.filter(r=>r[7]==='Engage Now').length;
+}
+
+function sortRecall(col) {
+  if (recallSortCol === col) recallSortAsc = !recallSortAsc;
+  else { recallSortCol = col; recallSortAsc = true; }
+  document.querySelectorAll('#recall-table thead th').forEach(th => {
+    const matched = parseInt(th.dataset.col) === col;
+    th.classList.toggle('sorted', matched);
+    const icon = th.querySelector('.sort-icon');
+    if (icon) icon.textContent = matched ? (recallSortAsc?'↑':'↓') : '↕';
+  });
+  renderRecall();
+}
+
+function resetRecall() {
+  ['rf-search','rf-type','rf-hrn','rf-ready'].forEach(id => {
+    const el = document.getElementById(id);
+    el.tagName === 'INPUT' ? el.value = '' : el.value = '';
+  });
+  recallSortCol = -1; recallSortAsc = true;
+  document.querySelectorAll('#recall-table thead th').forEach(th => {
+    th.classList.remove('sorted');
+    const icon = th.querySelector('.sort-icon');
+    if (icon) icon.textContent = '↕';
+  });
+  renderRecall();
+}
+
+// Wire recall filters
+['rf-search','rf-type','rf-hrn','rf-ready'].forEach(id => {
+  document.getElementById(id).addEventListener('input', renderRecall);
+  document.getElementById(id).addEventListener('change', renderRecall);
+});
+
+// Sync top scrollbar — pre-clinical table
+const pcTopScroll = document.getElementById('preclinical-top-scroll');
+const pcTableWrap = document.getElementById('preclinical-table-wrap');
+pcTopScroll.addEventListener('scroll', () => { pcTableWrap.scrollLeft = pcTopScroll.scrollLeft; });
+pcTableWrap.addEventListener('scroll', () => { pcTopScroll.scrollLeft = pcTableWrap.scrollLeft; });
+
+// Sync top scrollbar — actionable recall table
+const recTopScroll = document.getElementById('recall-top-scroll');
+const recTableWrap = document.getElementById('recall-table-wrap');
+recTopScroll.addEventListener('scroll', () => { recTableWrap.scrollLeft = recTopScroll.scrollLeft; });
+recTableWrap.addEventListener('scroll', () => { recTopScroll.scrollLeft = recTableWrap.scrollLeft; });
+</script>
+</body>
+</html>
