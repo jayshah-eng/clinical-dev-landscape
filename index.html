@@ -850,7 +850,7 @@ const DATA = [
    "Genetics-First Recruitment", "High", "10K–50K",
    "Engage Now", "https://www.leqvio.com"],
 
-  ["Cardiovascular", "Familial Hypercholesterolemia", "Verve Therapeutics", "VERVE-101 (PCSK9 base editing)", "Phase 1/2",
+  ["Cardiovascular", "Familial Hypercholesterolemia", "Verve Therapeutics (Eli Lilly)", "VERVE-101 (PCSK9 base editing)", "Phase 1/2",
    "PCSK9 / LDLR", "LOF/GOF variant + HeFH genetic confirmation",
    "Genetics-First Recruitment", "High", "10K–50K",
    "Engage Now", "https://www.vervetx.com/science/programs/"],
@@ -870,7 +870,7 @@ const DATA = [
    "Genetics-First Recruitment", "High", "1K–10K",
    "Engage Now", "https://www.camzyos.com"],
 
-  ["Cardiovascular", "Hypertrophic Cardiomyopathy", "Cytokinetics", "Aficamten", "Phase 3",
+  ["Cardiovascular", "Hypertrophic Cardiomyopathy", "Cytokinetics", "Myqorzo (aficamten)", "Commercial",
    "MYH7 / MYBPC3", "Pathogenic variant",
    "Genetics-First Recruitment", "High", "1K–10K",
    "Engage Now", "https://clinicaltrials.gov/search?term=aficamten+HCM"],
@@ -1143,18 +1143,18 @@ const DATA = [
    "Engage Now", "https://clinicaltrials.gov/search?term=nomlabofusp+Friedreich+ataxia"],
 
   // ── KARUNA THERAPEUTICS ───────────────────────────────────────────────────
-  ["Neurodegenerative", "Schizophrenia (precision subtyping)", "Karuna Therapeutics", "Cobenfy (xanomeline-trospium)", "Commercial",
+  ["Neurodegenerative", "Schizophrenia (precision subtyping)", "Bristol-Myers Squibb", "Cobenfy (xanomeline-trospium)", "Commercial",
    "Polygenic SCZ PRS + CHRM1 / CHRM4", "PRS (treatment response enrichment)",
    "Prognostic Enrichment", "Medium", ">50K",
    "Develop PRS", "https://clinicaltrials.gov/search?term=KarXT+Cobenfy+schizophrenia"],
 
   // ── JOHNSON & JOHNSON ─────────────────────────────────────────────────────
-  ["INI / Autoimmune", "Crohn's Disease (IL-23 pathway)", "Johnson & Johnson", "Tremfya (guselkumab)", "Phase 3",
+  ["INI / Autoimmune", "Crohn's Disease (IL-23 pathway)", "Johnson & Johnson", "Tremfya (guselkumab)", "Commercial",
    "IL23R / NOD2 + Polygenic IBD PRS", "Risk variant + PRS",
    "Both", "Medium", ">50K",
    "Develop PRS", "https://clinicaltrials.gov/search?term=guselkumab+Crohns+disease"],
 
-  ["INI / Autoimmune", "Generalized Myasthenia Gravis", "Johnson & Johnson", "Nipocalimab", "Phase 3",
+  ["INI / Autoimmune", "Generalized Myasthenia Gravis", "Johnson & Johnson", "Imaavy (nipocalimab)", "Commercial",
    "FCGRT / MuSK / AChR subtype", "Pharmacogenomic + biomarker subtype",
    "Genetics-First Recruitment", "Medium", "1K–10K",
    "Qualify Cohort", "https://clinicaltrials.gov/search?term=nipocalimab+myasthenia+gravis"],
@@ -1321,6 +1321,37 @@ const DATA = [
    "FLG LOF / IL4RA + Polygenic AD PRS", "LOF variant + PRS",
    "Both", "High", ">50K",
    "Develop PRS", "https://clinicaltrials.gov/search?term=upadacitinib+atopic+dermatitis"],
+
+  // ── NEW ENTRIES (verified 2025–2026) ──────────────────────────────────────
+  ["Cardiovascular", "Lipoprotein(a) Elevation (oral)", "Eli Lilly", "Muvalaplin", "Phase 3",
+   "LPA / rs10455872", "Causal variant + PRS",
+   "Both", "High", ">50K",
+   "Engage Now", "https://clinicaltrials.gov/study/NCT07157774"],
+
+  ["Cardiovascular", "Lipoprotein(a) Elevation", "Eli Lilly", "Lepodisiran", "Phase 3",
+   "LPA / rs10455872", "Causal variant + PRS",
+   "Both", "High", ">50K",
+   "Engage Now", "https://clinicaltrials.gov/study/NCT06292013"],
+
+  ["Cardiovascular", "Familial Hypercholesterolemia", "Verve Therapeutics (Eli Lilly)", "VERVE-102 (PCSK9 base editing)", "Phase 1/2",
+   "PCSK9 / LDLR", "LOF/GOF variant + HeFH genetic confirmation",
+   "Genetics-First Recruitment", "High", "10K–50K",
+   "Engage Now", "https://clinicaltrials.gov/study/NCT06164730"],
+
+  ["Neurodegenerative", "Huntington's Disease (gene therapy)", "uniQure", "AMT-130", "Phase 1/2",
+   "HTT (CAG repeat expansion)", "Pathogenic CAG repeat expansion (≥36)",
+   "Genetics-First Recruitment", "High", "<1K",
+   "Engage Now", "https://clinicaltrials.gov/study/NCT04120493"],
+
+  ["Kidney", "IgA Nephropathy (APRIL pathway)", "Otsuka", "Sibeprenlimab", "Phase 3",
+   "TNFSF13 (APRIL) / Polygenic IgAN PRS", "Risk variant + PRS",
+   "Both", "Medium", "10K–50K",
+   "Develop PRS", "https://clinicaltrials.gov/study/NCT05248646"],
+
+  ["Kidney", "IgA Nephropathy (endothelin)", "Novartis", "Vanrafia (atrasentan)", "Commercial",
+   "Polygenic IgAN PRS + EDNRA", "Risk variant + PRS",
+   "Both", "Medium", "10K–50K",
+   "Develop PRS", "https://clinicaltrials.gov/search?term=atrasentan+IgA+nephropathy"],
 ];
 
 const AREA_CLASS = {
@@ -1745,7 +1776,7 @@ const RECALL_DATA = [
 
   ["MYH7 / MYBPC3", "Pathogenic sarcomere gene variant", "Hypertrophic Cardiomyopathy (HCM)",
    "1K–10K", "Genetics-First Enrollment", "Commercial / Phase 3",
-   "BMS (Camzyos), Cytokinetics (Aficamten)",
+   "BMS (Camzyos), Cytokinetics (Myqorzo/aficamten — FDA approved Dec 2025)",
    "Engage Now",
    "HCM pathogenic carriers may be presymptomatic; recall enables cascade family screening and early myosin inhibitor eligibility"],
 
@@ -1808,6 +1839,12 @@ const RECALL_DATA = [
    "Novartis (Zolgensma), Roche/Genentech (Evrysdi), Biogen (Spinraza)",
    "Engage Now",
    "SMN1 carrier frequency ~1 in 40; adult SMA2/3 patients may be undertreated; carrier recall enables family planning + newborn intervention"],
+
+  ["HTT (CAG repeat)", "Pathogenic CAG trinucleotide repeat expansion (≥36 repeats)", "Huntington's Disease",
+   "<1K", "Genetics-First Enrollment", "Phase 1/2",
+   "uniQure (AMT-130 gene therapy), Multiple ASO/gene-targeting programs",
+   "Engage Now",
+   "Fully penetrant monogenic disease with definitive molecular dx; presymptomatic expansion carriers are the ideal population for emerging HTT-lowering gene therapy and disease-modifying trials"],
 
   // ── MEDIUM PRIORITY: Develop Protocol ────────────────────────────────────
   ["Polygenic CAD / LDL PRS", "Top decile polygenic score for LDL or coronary artery disease", "Atherosclerotic CVD Prevention",
